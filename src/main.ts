@@ -1,6 +1,15 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { isWindows } from './test1';
+import { HelloCommand } from './HelloCommand';
+import { MoveAliasCommand } from './MoveAliasCommand';
+import { RenameAliasCommand } from './RenameAliasCommand';
 
-// Remember to rename these classes and interfaces!
+
+interface Command {
+	id: string;
+	name: string;
+	execute(app: App): void | Promise<void>;
+}
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -12,10 +21,23 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
+	commands: Command[] = [];
 
 	async onload() {
 		await this.loadSettings();
+		this.commands = [
+			new HelloCommand(),
+			new MoveAliasCommand(),
+			new RenameAliasCommand(),
+		];
 
+		for (const command of this.commands) {
+			this.addCommand({
+				id: command.id,
+				name: command.name,
+				callback: () => command.execute(this.app)
+			});
+		}
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
@@ -31,9 +53,17 @@ export default class MyPlugin extends Plugin {
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
 			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
+			name: 'Open sample modal (simple3 s s)',
 			callback: () => {
 				new SampleModal(this.app).open();
+				isWindows();
+			}
+		});
+		this.addCommand({
+			id: 'open-sample-modal-simple2 s',
+			name: 'Open sample modal (simple3 s s)',
+			callback: () => {
+				this.logSampleModal();
 			}
 		});
 		// This adds an editor command that can perform some operation on the current editor instance
@@ -80,6 +110,11 @@ export default class MyPlugin extends Plugin {
 
 	onunload() {
 
+		console.log(`----------------------------------`);
+	}
+
+	logSampleModal() {
+		console.log('Sample modal log');
 	}
 
 	async loadSettings() {
@@ -97,12 +132,12 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -116,7 +151,7 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 

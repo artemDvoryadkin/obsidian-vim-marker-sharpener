@@ -1,3 +1,7 @@
+# 
+- [ ] нужно добавить .hotreload в команду деплоя
+- [ ] нужно сделать вофрмирование дистрибутива в отдельную директорию
+
 # Obsidian Sample Plugin
 
 This is a sample plugin for Obsidian (https://obsidian.md).
