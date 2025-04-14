@@ -1,10 +1,11 @@
-import { App, Notice, MarkdownView } from 'obsidian';
-import { Command } from './types';
+import { App, Notice, MarkdownView, Command } from 'obsidian';
+import { SharpenerCommand } from './Commons/types';
 
-export class RenameAliasCommand implements Command {
+export class RenameAliasCommand extends SharpenerCommand {
 	id = 'rename-alias';
 	name = 'Rename alias';
-
+	prefix = '`ar';
+	command: Command;
 	async execute(app: App): Promise<void> {
 		const activeView = app.workspace.getActiveViewOfType(MarkdownView);
 		if (!activeView) {

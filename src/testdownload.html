@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save Variable to File</title>
+</head>
+<body>
+  <button id="saveButton">Сохранить в файл</button>
+
+  <script>
+    document.getElementById('saveButton').addEventListener('click', () => {
+      const data = "Пример текста для сохранения в файл";
+      const blob = new Blob([data], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "example.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  </script>
+</body>
+</html>

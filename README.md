@@ -2,6 +2,10 @@
 - [ ] нужно добавить .hotreload в команду деплоя
 - [ ] нужно сделать вофрмирование дистрибутива в отдельную директорию
 
+
+# мои логи
+- добавили пакеты `npm install @codemirror/view @codemirror/state @codemirror/language --save-dev`
+
 # Obsidian Sample Plugin
 
 This is a sample plugin for Obsidian (https://obsidian.md).
