@@ -1,7 +1,7 @@
 {
 	"name": "Sharpener",
-	"version": "1.0.3",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"version": "0.1.2",
+	"description": "Text formatting commands in Vim mode. Supports applying styles (bold, italic, etc.). Works correctly in visual mode with selected text.",
 	"main": "src/main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
@@ -39,6 +39,5 @@
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
 	},
-	"dependencies": {
-	}
+	"dependencies": {}
 }

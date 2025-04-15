@@ -1,10 +1,10 @@
 {
 	"id": "vim-marker-sharpener",
 	"name": "Vim Marker Sharpener",
-	"version": "1.0.3",
 	"minAppVersion": "0.15.0",
 	"description": "Text formatting commands in Vim mode. Supports applying styles (bold, italic, etc.). Works correctly in visual mode with selected text.",
 	"author": "Artem Dvoryadkin",
 	"fundingUrl": "https://github.com/artemDvoryadkin/obsidian-vim-marker-sharpener",
-	"isDesktopOnly": true
+	"isDesktopOnly": true,
+	"version": "0.1.2"
 }
