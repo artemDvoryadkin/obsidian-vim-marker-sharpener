@@ -1,17 +1,17 @@
-import { App, Command, Plugin, TFile } from 'obsidian';
-import { FileHelper } from 'src/Helpers/FileHelpers';
-import MyPlugin from 'src/main';
-import { MyPluginSettings } from 'src/MyPluginSettingTab';
+import { Command, Plugin, App } from 'obsidian';
+import VimMarkerPlugin from 'src/main';
+import { MyPluginSettings } from 'src/VImMarkerShrpenerSettingTab';
+
 
 export abstract class SharpenerCommand {
 	id: string;
 	name: string;
 	prefix: string;
 	command: Command;
-	plugin: MyPlugin;
+	plugin: VimMarkerPlugin;
 
 	constructor(plugin: Plugin) {
-		this.plugin = plugin as MyPlugin;
+		this.plugin = plugin as VimMarkerPlugin;
 	}
 
 	abstract execute(app: App): void | Promise<void>;
@@ -25,8 +25,8 @@ export abstract class SharpenerCommand {
 		return true;
 	}
 
-	getMyPlugin(): MyPlugin {
-		return this.plugin
+	getMyPlugin(): VimMarkerPlugin {
+		return this.plugin;
 	}
 
 	getCommandOfPlugin(type: typeof SharpenerCommand): Command {

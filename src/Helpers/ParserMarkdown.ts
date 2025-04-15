@@ -13,15 +13,19 @@ export class ParserMarkdown {
 			|| textChain.from <= to && textChain.to >= to
 		);
 	}
-	getClearPosition(position: number, chainsText: TextChain[]): number {
+	getClearPosition(position: number, markerAction: MarkerAction, chainsText: TextChain[]): number {
 		let clearPosition = -1
 		let currentPosition = -1
+
+		const formaterCommanger = new FormaterCommanger()
+		const [openTag, closeTag] = formaterCommanger.getTags(markerAction);
 
 		for (let i = 0; i < chainsText.length; i++) {
 			const textChain = chainsText[i]
 
 			let isSkip = false
-			if (textChain.type == 'bold_open' || textChain.type == 'bold_close') isSkip = true
+
+			if (textChain.type == openTag || textChain.type == closeTag) isSkip = true
 
 			for (let i = 0; i < textChain.content!.length; i++) {
 				currentPosition++

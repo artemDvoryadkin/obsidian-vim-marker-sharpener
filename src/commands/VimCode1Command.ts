@@ -1,5 +1,5 @@
 import { Command, App } from 'obsidian';
-import { SharpenerCommand } from 'src/Commons/types';
+import { SharpenerCommand } from 'src/Commons/SharpenerCommand';
 
 export class VimCode1Command extends SharpenerCommand {
 	id: 'vimcommand';

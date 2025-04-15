@@ -3,6 +3,23 @@ import { ParserMarkdown } from '../ParserMarkdown';
 import { expect } from '@jest/globals';
 import { Remarkable } from 'remarkable';
 
+describe('Разное', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// выделение строки полной
+	// TODO: ошибка нужно пофиксить ели есть символы табуляции
+	it.each([
+		{ input: "Y consistent with D and C to the end of line ", position: 3, result: "Y **consistent** with D and C to the end of line ", description: "" }
+	])(`разное ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
+		const resultCall = formaterCommanger.markerBold(input, position)
+		console.log("result", result);
+		expect(resultCall.lineText).toBe(result);
+	})
+})
 describe('РАБОЧИЙ ПРИМЕР', () => {
 	let formaterCommanger: FormaterCommanger;
 
@@ -17,9 +34,6 @@ describe('РАБОЧИЙ ПРИМЕР', () => {
 	test('рабочий пример', () => {
 		const testData =
 			{ input: "- [x] если не выделено и вызывается команда", positionBeging: 6, positionEnd: 10, result: "- [x] **если** не выделено и вызывается команда", description: "" }
-
-
-
 
 		const result = formaterCommanger.markerBold(testData.input, testData.positionBeging, testData.positionEnd)
 		console.log("result=", result);
@@ -105,7 +119,7 @@ describe('Разное', () => {
 	])(`разное ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const parser = new ParserMarkdown();
 		const chainsText = parser.parseLine(input)
-		const clearPosition = parser.getClearPosition(position, chainsText)
+		const clearPosition = parser.getClearPosition(position, 'bold', chainsText)
 		console.log("result", result);
 		expect(clearPosition).toBe(result);
 
@@ -115,13 +129,14 @@ describe('Разное', () => {
 	})
 
 	// TODO: ошибка нужно пофиксить ели есть символы табуляции
-	it.skip.each([
+	it.each([
 		//{ input: "Текст5   , жирный ", position: 9, result: "Текст5   **,** жирный ", description: "" },
-		{ input: "Текст5 \t\t, жирный ", position: 9, result: "Текст5 \t\t**,** жирный ", description: "" }
+		//{ input: "Текст5 \t\t, жирный ", position: 9, result: "Текст5 \t\t**,** жирный ", description: "" },
+		{ input: "Y consistent with D and C to the end of line ", position: 3, result: "Y **consistent** with D and C to the end of line ", description: "" }
 	])(`разное ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
 		console.log("result", result);
-		expect(resultCall).toBe(result);
+		expect(resultCall.lineText).toBe(result);
 	})
 
 	it.each([

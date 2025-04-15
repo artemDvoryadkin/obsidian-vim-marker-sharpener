@@ -4,26 +4,36 @@ import { App, Editor, EditorPosition, FileView, MarkdownView, Notice, TFile, Wor
 // import { CodeMirror } from 'obsidian';
 
 export class EditorHelper {
-	private editor: Editor;
 	private app: App;
+	private _editor: Editor
+	private _activeView: MarkdownView | FileView | null;
 	private activeLeaf: WorkspaceLeaf | null;
+
 	constructor(app: App) {
 		this.app = app;
-
-		const activeView = app.workspace.getActiveViewOfType(FileView)
-
-		console.log("activeView", activeView && activeView.getViewType())
-		if (!activeView || !(activeView.getViewType() == 'markdown' || activeView.getViewType() == 'pdf')) {
-			new Notice('No active editor found.a');
-			return;
-		}
-		if (activeView.getViewType() === 'markdown') {
-			this.editor = (activeView as MarkdownView).editor;
-		}
-		this.activeLeaf = app.workspace.getMostRecentLeaf()
-
 	}
 
+	get editor() {
+		if (!this._editor && this.activeView) {
+			if (this._activeView!.getViewType() === 'markdown') {
+				this._editor = (this._activeView as MarkdownView).editor;
+			}
+			return this._editor
+		}
+
+		throw new Error('Invalid editor view');
+	}
+	get activeView() {
+		if (!this._activeView) {
+			const activeView = this.app.workspace.getActiveViewOfType(FileView)
+			if (!activeView || !(activeView.getViewType() == 'markdown' || activeView.getViewType() == 'pdf')) {
+				throw new Error('Invalid editor view');
+			}
+			this._activeView = activeView
+
+		}
+		return this._activeView
+	}
 	replaseLine(lineText: string, lineNumber: number) {
 
 		const line = this.getLineByNumber(lineNumber)
@@ -63,6 +73,13 @@ export class EditorHelper {
 
 	getLineByNumber(lineNumber: number): string {
 		return this.editor.getLine(lineNumber)
+	}
+	getActiveView(): MarkdownView {
+		return this.app.workspace.getActiveViewOfType(MarkdownView) as MarkdownView;
+	}
+
+	getCodeMirror(view: MarkdownView): CodeMirror.Editor {
+		return (view as any).editMode?.editor?.cm?.cm;
 	}
 
 	getLinesFromTo(fromLineNumber: number, toLineNumber: number): string[] {

@@ -133,6 +133,7 @@ export class FormaterCommanger {
 		const leftContext = textChain.content.slice(0, position)
 		const rightContext = textChain.content.slice(position)
 		const leftRight = textChain.from + leftContext.length - 1
+
 		const rightLeft = textChain.from + leftContext.length
 
 		let leftSelectPosition: number | undefined
@@ -193,7 +194,7 @@ export class FormaterCommanger {
 		}
 	}
 
-	private getTags(markerAction: MarkerAction): MarkerType[] {
+	getTags(markerAction: MarkerAction): MarkerType[] {
 		if (markerAction == 'bold') return ['bold_open', 'bold_close']
 		if (markerAction == 'highlight') return ['highlight_open', 'highlight_close']
 		if (markerAction == 'italic') return ['italic_open', 'italic_close']
@@ -234,7 +235,7 @@ export class FormaterCommanger {
 		const parser = new ParserMarkdown();
 		const chainsText = parser.parseLine(textLine, fromCharPosition, toCharPosition);
 
-		const clearPositionFrom = parser.getClearPosition(fromCharPosition, chainsText)
+		const clearPositionFrom = parser.getClearPosition(fromCharPosition, markerAction, chainsText)
 		const fromChainPosition = parser.getTextChain(chainsText, fromCharPosition) as TextChain;
 
 		const [openTag, closeTag] = this.getTags(markerAction);
@@ -245,9 +246,9 @@ export class FormaterCommanger {
 			// выделение текста блок
 			if (fromCharPosition !== undefined && toCharPosition !== undefined) {
 				const toChainPosition = parser.getTextChain(chainsText, toCharPosition) as TextChain;
-				clearPositionTo = parser.getClearPosition(toCharPosition, chainsText)
+				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition);
 
-				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition)
+				clearPositionTo = parser.getClearPosition(toCharPosition, markerAction, chainsText);
 				const isFlagTo = this.getIsFlagByMarkerAction(markerAction, toChainPosition)
 
 				const markerOpen = this.createOpenTag(markerAction, true)
@@ -287,7 +288,8 @@ export class FormaterCommanger {
 				const spaceChars = [' ', '\n', '\t']
 				if (spaceChars.includes(textLine.charAt(fromCharPosition)) && toCharPosition == undefined) return { fromSelectPosition: fromCharPosition, toSelectPosition: fromCharPosition, lineText: textLine }
 
-				if (fromChainPosition.isBold) {
+				const isFlag = this.getIsFlagByMarkerAction(markerAction, fromChainPosition)
+				if (isFlag) {
 					this.clearMarkerAction(chainsText, fromChainPosition, markerAction)
 				}
 				else if (fromChainPosition.type == 'text') {
@@ -300,7 +302,7 @@ export class FormaterCommanger {
 
 					for (let i = 0; i < parts.length; i++) {
 						const beginPart = cursor
-						const endPart = cursor + parts[i].length
+						const endPart = cursor + parts[i].length - 1
 						if (fromCharPosition >= beginPart && fromCharPosition <= endPart) {
 
 							const boldOpen = this.createOpenTag(markerAction, true)
@@ -309,7 +311,7 @@ export class FormaterCommanger {
 							this.instertTextChain(chainsText, markerAction, boldClose, endPart)
 							break;
 						}
-						cursor += parts[i].length;
+						cursor += parts[i].length + 1;
 					}
 				}
 			}

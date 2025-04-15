@@ -1,5 +1,5 @@
-import { PluginSettingTab, App, Setting, TFolder, SuggestModal, FuzzySuggestModal, Notice } from 'obsidian';
-import MyPlugin from './main';
+import { PluginSettingTab, App, Setting, TFolder, FuzzySuggestModal, Notice } from 'obsidian';
+import VimMarkerPlugin from './main';
 
 // Интерфейс настроек
 export interface MyPluginSettings {
@@ -22,10 +22,10 @@ export const DEFAULT_SETTINGS: MyPluginSettings = {
 };
 
 // Вкладка настроек
-export class MyPluginSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+export class VimMarkerSharpenerSettingTab extends PluginSettingTab {
+	plugin: VimMarkerPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: VimMarkerPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -56,15 +56,6 @@ export class MyPluginSettingTab extends PluginSettingTab {
 					})
 				);
 			});
-		/*			.addText((text) => text
-						.setPlaceholder("Введите директорию для сохрания MD файлов")
-						.setValue(this.plugin.settings.outputDirForPdfToMd)
-						.onChange(async (value) => {
-							this.plugin.settings.outputDirForPdfToMd = value;
-							await this.plugin.saveSettings();
-						})
-					);
-		*/
 
 		// Верисия Marker_pdf
 		new Setting(containerEl)

@@ -1,5 +1,5 @@
 import { Command, App, EditorPosition } from 'obsidian';
-import { SharpenerCommand } from 'src/Commons/types';
+import { SharpenerCommand } from 'src/Commons/SharpenerCommand';
 import EditorHelper from 'src/Helpers/EditorHelper';
 import { MarkerAction, FormaterCommanger } from 'src/Helpers/FormaterHelper';
 
