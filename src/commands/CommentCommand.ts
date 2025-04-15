@@ -1,13 +1,15 @@
 import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
-export class BoldCommand extends MarkerCommandBase {
-	id = 'bold-command';
-	name = 'Toggle Bold';
+
+
+export class CommentCommand extends MarkerCommandBase {
+	id = 'toggle-comment';
+	name = 'Toggle Commant';
 	prefix = '';
 	command: Command;
 
 	async execute(app: App): Promise<void> {
-		await this.executeBase(app, 'bold');
+		await this.executeBase(app, 'comment');
 	}
 }

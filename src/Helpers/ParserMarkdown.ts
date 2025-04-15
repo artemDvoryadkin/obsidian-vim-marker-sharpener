@@ -4,8 +4,11 @@ export class ParserMarkdown {
 
 	getTextChain(textChains: TextChain[], cursorPosition: number): TextChain | undefined {
 
-		return textChains.find(textChain => textChain.from <= cursorPosition && textChain.to >= cursorPosition);
+		return textChains.find(textChain =>
+			textChain.from <= cursorPosition && cursorPosition <= textChain.to
+		);
 	}
+
 	getTextChains(textChains: TextChain[], from: number, to: number): TextChain[] | undefined {
 
 		return textChains.filter(textChain =>

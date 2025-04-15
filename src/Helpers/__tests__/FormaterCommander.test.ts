@@ -230,6 +230,24 @@ describe('добавление выделения болд в слове', () =>
 	})
 })
 
+describe('Снятие выделения выделением слова', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// снимаем выделение со слова, находясь на маркетах выделения
+	it.each([
+		{ input: "**exmap editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", position: 0, positionTo: 5, result: "exma**p editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", description: "четвертая звезда" },
+		{ input: "**exmap editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", position: 0, positionTo: 6, result: "exmap **editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", description: "четвертая звезда" },
+		{ input: "**exmap editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", position: 0, positionTo: 7, result: "exmap **editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", description: "четвертая звезда" },
+	])(`Пример:$input позиция $position, $positionTo =>> $result :: $description`, ({ input, position, positionTo, result, description }) => {
+		const resultCall = formaterCommanger.markerBold(input, position, positionTo)
+		console.log("result", result);
+		expect(resultCall.lineText).toBe(result);
+	})
+})
 describe('Снятие выделения болд со слова', () => {
 	let formaterCommanger: FormaterCommanger;
 

@@ -1,14 +1,14 @@
 import { App, EditorSelection, Plugin, PluginManifest, } from 'obsidian';
 
 import { SharpenerCommand } from './Commons/SharpenerCommand';
-import { DEFAULT_SETTINGS, MyPluginSettings, VimMarkerSharpenerSettingTab } from './VImMarkerShrpenerSettingTab';
+import { DEFAULT_SETTINGS, MyPluginSettings, VimMarkerSharpenerSettingTab } from './SettingTab';
 import { EditorHelper } from './Helpers/EditorHelper';
 
 import { HighlightCommand } from './commands/HighlightCommand';
 import { BoldCommand } from './commands/BoldCommand';
+import { CommentCommand } from './commands/CommentCommand';
 import { ItalicCommand } from './commands/ItalicCommand';
 import { StrikethroughCommand } from './commands/StrikethroughCommand';
-import { VimCode1Command } from './commands/VimCode1Command';
 import { CodeCommand } from './commands/CodeCommand';
 
 
@@ -96,7 +96,7 @@ export default class VimMarkerPlugin extends Plugin {
 			new ItalicCommand(this),
 			new StrikethroughCommand(this),
 			new CodeCommand(this),
-			new VimCode1Command(this)
+			new CommentCommand(this),
 		];
 
 		try {

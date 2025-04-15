@@ -2,8 +2,8 @@ import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
 
-export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close';
-export type MarkerAction = 'bold' | 'italic' | 'highlight' | 'strikethrough' | 'code'
+export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close' | 'comment_open' | 'comment_close';
+export type MarkerAction = 'bold' | 'italic' | 'highlight' | 'strikethrough' | 'code' | 'comment'
 // Define custom token types
 interface Token {
 	type: string;
@@ -11,6 +11,7 @@ interface Token {
 	hLevel?: number;
 	params?: string;
 }
+
 
 
 export class LineTextResult {
@@ -36,7 +37,9 @@ export class TextChain {
 		if (type == 'strikethrough_open') { this.isBold = false; this.content = '~~' }
 		if (type == 'strikethrough_close') { this.isBold = false; this.content = '~~' }
 		if (type == 'code_open') { this.isBold = false; this.content = '`' }
-		if (type == 'code_close') { this.isBold = false; this.content = '`' }
+		if (type == 'code_open') { this.isBold = false; this.content = '`' }
+		if (type == 'comment_open') { this.isBold = false; this.content = '%%' }
+		if (type == 'comment_close') { this.isBold = false; this.content = '%%' }
 
 		this.from = from == undefined ? -1 : from;
 		this.to = to == undefined ? -1 : to;
@@ -51,12 +54,15 @@ export class TextChain {
 		if (type == 'highlight_open' || type == 'highlight_close') this.markerAction = 'highlight'
 		if (type == 'strikethrough_open' || type == 'strikethrough_close') this.markerAction = 'strikethrough'
 		if (type == 'code_open' || type == 'code_close') this.markerAction = 'code'
+		if (type == 'comment_open' || type == 'comment_close') this.markerAction = 'comment'
 	}
 	isOpenMarker(): boolean {
-		return this.type == 'bold_open' || this.type == 'italic_open' || this.type == 'highlight_open' || this.type == 'strikethrough_open' || this.type == 'code_open'
+		return this.type == 'bold_open' || this.type == 'italic_open' || this.type == 'highlight_open' || this.type == 'strikethrough_open' || this.type == 'code_open' || this.type == 'comment_open'
+
 	}
 	isCloseMarker(): boolean {
-		return this.type == 'bold_close' || this.type == 'italic_close' || this.type == 'highlight_close' || this.type == 'strikethrough_close' || this.type == 'code_close'
+		return this.type == 'bold_close' || this.type == 'italic_close' || this.type == 'highlight_close' || this.type == 'strikethrough_close' || this.type == 'code_close' || this.type == 'comment_close'
+
 	}
 	from: number
 	to: number
@@ -67,6 +73,7 @@ export class TextChain {
 	isHighlight: boolean
 	isStrikethrough: boolean
 	isCode: boolean
+	isComment: boolean
 	isNew: boolean
 	isBold: boolean
 	fromSelectedPosition?: number
@@ -88,6 +95,8 @@ export class FormaterCommanger {
 		this.sourceTokens.push({ type: 'strikethrough_close', content: '~~' })
 		this.sourceTokens.push({ type: 'code_open', content: '`' })
 		this.sourceTokens.push({ type: 'code_close', content: '`' })
+		this.sourceTokens.push({ type: 'comment_open', content: '%%' })
+		this.sourceTokens.push({ type: 'comment_close', content: '%%' })
 	}
 
 	getSourceTokens(markerAction: MarkerAction): { openToken: Token, closeToken: Token } {
@@ -99,7 +108,7 @@ export class FormaterCommanger {
 
 	getAll(): { openToken: Token, closeToken: Token, markerAction: MarkerAction }[] {
 		const result: { openToken: Token, closeToken: Token, markerAction: MarkerAction }[] = []
-		const markers: MarkerAction[] = ['bold', 'italic', 'highlight', 'strikethrough', 'code']
+		const markers: MarkerAction[] = ['bold', 'italic', 'highlight', 'strikethrough', 'code', 'comment']
 
 		markers.forEach(markerAction => {
 			const { openToken, closeToken } = this.getSourceTokens(markerAction)
@@ -200,6 +209,7 @@ export class FormaterCommanger {
 		if (markerAction == 'italic') return ['italic_open', 'italic_close']
 		if (markerAction == 'strikethrough') return ['strikethrough_open', 'strikethrough_close']
 		if (markerAction == 'code') return ['code_open', 'code_close']
+		if (markerAction == 'comment') return ['comment_open', 'comment_close']
 		return []
 	}
 	private createOpenTag(markerAction: MarkerAction, isNew: boolean = false): TextChain {
@@ -218,6 +228,8 @@ export class FormaterCommanger {
 		if (markerAction == 'highlight') return chain.isHighlight
 		if (markerAction == 'strikethrough') return chain.isStrikethrough
 		if (markerAction == 'code') return chain.isCode
+		if (markerAction == 'comment') return chain.isComment
+
 		return false
 	}
 
@@ -227,6 +239,14 @@ export class FormaterCommanger {
 		if (markerAction == 'highlight') chain.isHighlight = value
 		if (markerAction == 'strikethrough') chain.isStrikethrough = value
 		if (markerAction == 'code') chain.isCode = value
+		if (markerAction == 'comment') chain.isComment = value
+	}
+	isTogher(firstChain: TextChain, secondChain: TextChain, chainsText: TextChain[]): boolean {
+
+		const fromIndex = chainsText.indexOf(firstChain)
+		const toIndex = chainsText.indexOf(secondChain)
+		return Math.abs(toIndex - fromIndex) == 1
+
 	}
 
 	markerMarkerAction(markerAction: MarkerAction, textLine: string, fromCharPosition: number, toCharPosition?: number): LineTextResult {
@@ -234,18 +254,23 @@ export class FormaterCommanger {
 
 		const parser = new ParserMarkdown();
 		const chainsText = parser.parseLine(textLine, fromCharPosition, toCharPosition);
+		console.log("parser", chainsText)
 
 		const clearPositionFrom = parser.getClearPosition(fromCharPosition, markerAction, chainsText)
-		const fromChainPosition = parser.getTextChain(chainsText, fromCharPosition) as TextChain;
+
+		let fromChainPosition = parser.getTextChain(chainsText, fromCharPosition)
 
 		const [openTag, closeTag] = this.getTags(markerAction);
 		let clearPositionTo: number | undefined
 
-		if (fromChainPosition) {
+		if (fromChainPosition !== undefined) {
 
 			// выделение текста блок
 			if (fromCharPosition !== undefined && toCharPosition !== undefined) {
-				const toChainPosition = parser.getTextChain(chainsText, toCharPosition) as TextChain;
+
+				const toChainPosition = parser.getTextChain(chainsText, toCharPosition)
+				if (toChainPosition === undefined) throw new Error("ddeieie")
+
 				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition);
 
 				clearPositionTo = parser.getClearPosition(toCharPosition, markerAction, chainsText);
@@ -254,7 +279,7 @@ export class FormaterCommanger {
 				const markerOpen = this.createOpenTag(markerAction, true)
 				const markerClose = this.createCloseTag(markerAction, true)
 
-				if (fromChainPosition == toChainPosition) {
+				if (fromChainPosition == toChainPosition && toChainPosition !== undefined) {
 					if (isFlagFrom) {
 						this.instertTextChain(chainsText, markerAction, markerClose, fromCharPosition - 1)
 						this.instertTextChain(chainsText, markerAction, markerOpen, toCharPosition + 1)
@@ -263,10 +288,24 @@ export class FormaterCommanger {
 						this.instertTextChain(chainsText, markerAction, markerClose, toCharPosition)
 					}
 				}
-				else {
+				else if (toChainPosition !== undefined) {
 					// отфильтровать chainsText между fromChainPosition и toChainPosition
-					if (isFlagFrom && isFlagTo) {
-						this.clearByMarkerAction(chainsText, fromChainPosition, toChainPosition, markerAction)
+					if (isFlagFrom && isFlagTo && toChainPosition !== undefined) {
+						if (this.isTogher(fromChainPosition, toChainPosition, chainsText)) {
+
+							if (fromChainPosition.isOpenMarker() && toChainPosition.type == 'text') {
+
+								fromChainPosition.isDelete = true
+								this.instertTextChain(chainsText, markerAction, markerOpen, toCharPosition + 1)
+
+							} else if (fromChainPosition.type == 'text' && toChainPosition.isOpenMarker()) {
+
+								toChainPosition.isDelete = true
+								this.instertTextChain(chainsText, markerAction, markerClose, fromCharPosition)
+							}
+						} else {
+							this.clearByMarkerAction(chainsText, fromChainPosition, toChainPosition, markerAction)
+						}
 					}
 					else if (!isFlagFrom && !isFlagTo) {
 						this.instertTextChain(chainsText, markerAction, markerOpen, fromCharPosition)
@@ -515,8 +554,9 @@ export class FormaterCommanger {
 
 			let count = 0
 			chainsText.forEach(chain => {
-				const chainIsOpenMarker = chain.type == markerOpen.type
-				if (chain.type == markerClose.type) count = 0
+				const chainIsOpenMarker = chain.isOpenMarker() && !chain.isDelete
+
+				if (chain.isCloseMarker()) count = 0
 
 				if (chainIsOpenMarker && count == 1) {
 					chain.isDelete = true
@@ -528,12 +568,12 @@ export class FormaterCommanger {
 
 			count = 0
 			for (let i = chainsText.length - 1; i >= 0; i--) {
-				const chainIsCloseMarker = chainsText[i].type == markerClose.type
+				const current = chainsText[i]
+				if (current.isOpenMarker()) count = 0
 
-				if (chainsText[i].type == markerOpen.type) count = 0
-
+				const chainIsCloseMarker = current.isCloseMarker() && !current.isDelete
 				if (chainIsCloseMarker && count == 1) {
-					chainsText[i].isDelete = true
+					current.isDelete = true
 				} else if (chainIsCloseMarker && count == 0) {
 					count = 1
 				}
@@ -586,6 +626,21 @@ export class FormaterCommanger {
 	findBoldOpenBefore(textChain: TextChain, chainsText: TextChain[]): TextChain | null {
 		return this.findMarkerOpenBefore('bold', textChain, chainsText)
 	}
+
+	getNextChain(textChain: TextChain, chainsText: TextChain[]): TextChain | undefined {
+		const startIndex = chainsText.indexOf(textChain);
+		if (startIndex === -1 || startIndex < chainsText.length - 1) return undefined;
+
+		return chainsText[startIndex + 1];
+	}
+
+	getPrevChain(textChain: TextChain, chainsText: TextChain[]): TextChain | undefined {
+		const startIndex = chainsText.indexOf(textChain);
+		if (startIndex === 1 || startIndex == 0) return undefined;
+
+		return chainsText[startIndex - 1];
+	}
+
 	findMarkerOpenBefore(markerAction: MarkerAction, textChain: TextChain, chainsText: TextChain[]): TextChain | null {
 
 		const markerOpen = this.createOpenTag(markerAction, false)

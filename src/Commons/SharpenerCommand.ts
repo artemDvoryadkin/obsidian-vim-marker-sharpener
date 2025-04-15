@@ -1,6 +1,6 @@
 import { Command, Plugin, App } from 'obsidian';
 import VimMarkerPlugin from 'src/main';
-import { MyPluginSettings } from 'src/VImMarkerShrpenerSettingTab';
+import { MyPluginSettings } from 'src/SettingTab';
 
 
 export abstract class SharpenerCommand {

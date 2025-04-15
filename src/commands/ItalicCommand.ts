@@ -3,8 +3,8 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class ItalicCommand extends MarkerCommandBase {
 	id = 'italic-command';
-	name = 'Smart Toggle Italic';
-	prefix = 'ic';
+	name = 'Toggle Italic';
+	prefix = '';
 	command: Command;
 
 	async execute(app: App): Promise<void> {
