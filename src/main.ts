@@ -24,6 +24,7 @@ export default class VimMarkerPlugin extends Plugin {
 		this.pluginName = manifest.name
 	}
 
+
 	async onload() {
 		console.log('loading %s plugin v%s ...', this.manifest.name, this.manifest.version);
 

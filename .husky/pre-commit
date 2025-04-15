@@ -1,1 +1,2 @@
 npm test
+tsc -noEmit -skipLibCheck
