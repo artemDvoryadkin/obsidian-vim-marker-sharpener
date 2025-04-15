@@ -1,5 +1,2 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/h"
-
 npm test
 npm tsc -noEmit -skipLibCheck
