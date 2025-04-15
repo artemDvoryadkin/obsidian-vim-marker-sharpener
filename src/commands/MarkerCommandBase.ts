@@ -19,6 +19,8 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 		const selectedVim = this.plugin.currentSelection;
 
 		const editorHelper = new EditorHelper(app);
+		editorHelper.activeView
+		editorHelper.editor
 
 		const formatterCommanger = new FormaterCommanger();
 

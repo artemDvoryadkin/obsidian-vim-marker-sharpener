@@ -18,11 +18,10 @@ export class EditorHelper {
 			if (this._activeView!.getViewType() === 'markdown') {
 				this._editor = (this._activeView as MarkdownView).editor;
 			}
-			return this._editor
 		}
-
-		throw new Error('Invalid editor view');
+		return this._editor
 	}
+
 	get activeView() {
 		if (!this._activeView) {
 			const activeView = this.app.workspace.getActiveViewOfType(FileView)
