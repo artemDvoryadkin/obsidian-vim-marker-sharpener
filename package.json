@@ -1,6 +1,6 @@
 {
 	"name": "Sharpener",
-	"version": "0.1.5",
+	"version": "0.2.0.0",
 	"description": "Text formatting commands in Vim mode. Supports applying styles (bold, italic, etc.). Works correctly in visual mode with selected text.",
 	"main": "src/main.js",
 	"scripts": {
