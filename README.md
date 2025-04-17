@@ -9,7 +9,7 @@
 > - **VISUAL**  
 > - **VISUAL LINE**
 
-# Heylo My Friends
+# Vim Marker Sharpener
 
 There are tons of plugins that do similar things or even the same. So why create this one?
 
