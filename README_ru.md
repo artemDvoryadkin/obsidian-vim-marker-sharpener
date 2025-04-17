@@ -104,5 +104,6 @@ vmap <Space>m :toggleCommentComment<CR>
 ```
 
 # P.S.
+> [!CAUTION]
 > Выделения это то что отличает здоровых пользователей Obsidian от больных. #joke
  

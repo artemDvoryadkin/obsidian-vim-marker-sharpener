@@ -1,105 +1,105 @@
 
-> [для понимающий Русский](README_ru.md)  
+> [для понимающий Русский](README.md)  
 
-# 
-- [ ] нужно добавить .hotreload в команду деплоя
-- [ ] нужно сделать вофрмирование дистрибутива в отдельную директорию
+# Just a Teaser
 
+> [!Tip]  
+> This plugin **works correctly with text selection**  
+> in VIM mode:  
+> - **VISUAL**  
+> - **VISUAL LINE**
 
-# мои логи
-- добавили пакеты `npm install @codemirror/view @codemirror/state @codemirror/language --save-dev`
+# Heylo My Friends
 
-# Obsidian Sample Plugin
+There are tons of plugins that do similar things or even the same. So why create this one?
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+> This **plugin works properly** in **VIM VISUAL mode**.  
+> You can configure your **vimrc** and use a leader key combo to format selected text as **bold**, *italic*, and more via a ***command list***.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+If you're not a VIM user, check out what the plugin can do — it enhances the basic text formatting functionality.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+# We Couldn't, Now We Can
+- Commands for formatting as **bold – highlight – italic – strikethrough – code – comments**
+- Combine multiple formatting styles
+- Remove formatting from a selected block
+- Delete formatting
+- Format a word in `NORMAL` mode
+- ...and more I forgot to mention
 
-## First time developing plugins?
+## Here's How It Works
 
-Quick starting guide for new plugin devs:
+<p align="center">
+  <img src="./assets/demo.gif" style="width: 80%" />
+</p>
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+## Planned Features
+- [ ] Proper support for non-vim selection mode  
+- [ ] `clear format` command  
+- [ ] Jump to next formatting  
+- [ ] Format the formatting (meta!)  
+- [ ] Format part of a sentence, or the whole sentence
 
-## Releasing new releases
+# Installation & Usage
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+For regular users, the plugin also works — you just need to bind the plugin's commands to hotkeys and enjoy the formatting process.
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+## For ❤️ Vimers ❤️
 
-## Adding your plugin to the community plugin list
+The plugin shines when you create a `.vimrc` file. To do this, install this plugin:  
+> - **Vimrc Support** https://github.com/esm7/obsidian-vimrc-support  
+Implements `.vimrc` behavior.  
+By default, the file should be located at: `path/to/VaultName/.obsidian.vimrc` — this is configurable in Vimrc Support settings.
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+**You’ll need** to create a VIM command for each plugin command.
 
-## How to use
+Here’s an example `.vimrc` to format text as bold.  
+In **VISUAL** or **VISUAL LINE** mode, pressing `!b` or `<Space>b` will format the selected text as bold.  
+In normal mode, use `<Space>efb`.
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+```vim
+" bold 
+exmap toggleBoldCommand obcommand vim-marker-sharpener:toggle-bold
+map <Space>efb :toggleBoldCommand<CR>
+vmap <Space>b :toggleBoldCommand<CR>
+vmap !b :toggleBoldCommand<CR>
 ```
 
-If you have multiple URLs, you can also do:
+And here's a full example of my `.vimrc` for all commands:
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+```vim
+" bold 
+exmap toggleBoldCommand obcommand vim-marker-sharpener:toggle-bold
+map <Space>efb :toggleBoldCommand<CR>
+vmap <Space>b :toggleBoldCommand<CR>
+vmap !b :toggleBoldCommand<CR>
+
+" highlight
+exmap toggleHighlightCommand obcommand vim-marker-sharpener:toggle-highlight
+map <Space>efh :toggleHighlightCommand<CR>
+vmap !h :toggleHighlightCommand<CR>
+vmap <Space>h :toggleHighlightCommand<CR>
+
+" italic
+exmap toggleItalicCommand obcommand vim-marker-sharpener:toggle-italic
+map <Space>efi :toggleItalicCommand<CR>
+vmap !i :toggleItalicCommand<CR>
+vmap <Space>i :toggleItalicCommand<CR>
+
+" strikethrough
+exmap toggleStrikethroughCommand  obcommand vim-marker-sharpener:toggle-strikethrough
+map <Space>efs :toggleStrikethroughCommand<CR>
+vmap !s :toggleStrikethroughCommand<CR>
+vmap <Space>s :toggleStrikethroughCommand<CR>
+
+" code 
+exmap toggleCodeCommand obcommand vim-marker-sharpener:toggle-code
+map <Space>efc :toggleCodeCommand<CR>
+vmap !c :toggleCodeCommand<CR>
+vmap <Space>c :toggleCodeCommand<CR>
+
+" comments
+exmap toggleCommentComment obcommand vim-marker-sharpener:toggle-comment
+map <Space>efm :toggleCommentComment<CR>
+vmap !m :toggleCommentComment<CR>
+vmap <Space>m :toggleCommentComment<CR>
 ```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
