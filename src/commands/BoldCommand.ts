@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class BoldCommand extends MarkerCommandBase {
-	id = 'bold-command';
+	id = 'toggle-bold';
 	name = 'Toggle Bold';
 	prefix = '';
 	command: Command;

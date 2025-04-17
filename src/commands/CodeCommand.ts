@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class CodeCommand extends MarkerCommandBase {
-	id = 'code-command';
+	id = 'toggle-code';
 	name = 'Toggle Code';
 	prefix = '';
 	command: Command;

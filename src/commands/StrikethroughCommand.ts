@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class StrikethroughCommand extends MarkerCommandBase {
-	id = 'strikethrough-command';
+	id = 'toggle-strikethrough';
 	name = 'Toggle Strikethrough';
 	prefix = '';
 	command: Command;

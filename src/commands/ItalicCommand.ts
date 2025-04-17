@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class ItalicCommand extends MarkerCommandBase {
-	id = 'italic-command';
+	id = 'toggle-italic';
 	name = 'Toggle Italic';
 	prefix = '';
 	command: Command;

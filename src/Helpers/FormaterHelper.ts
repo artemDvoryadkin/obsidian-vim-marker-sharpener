@@ -37,7 +37,7 @@ export class TextChain {
 		if (type == 'strikethrough_open') { this.isBold = false; this.content = '~~' }
 		if (type == 'strikethrough_close') { this.isBold = false; this.content = '~~' }
 		if (type == 'code_open') { this.isBold = false; this.content = '`' }
-		if (type == 'code_open') { this.isBold = false; this.content = '`' }
+		if (type == 'code_close') { this.isBold = false; this.content = '`' }
 		if (type == 'comment_open') { this.isBold = false; this.content = '%%' }
 		if (type == 'comment_close') { this.isBold = false; this.content = '%%' }
 
@@ -303,6 +303,11 @@ export class FormaterCommanger {
 								toChainPosition.isDelete = true
 								this.instertTextChain(chainsText, markerAction, markerClose, fromCharPosition)
 							}
+							else if (fromChainPosition.type == 'text' && toChainPosition.isCloseMarker()) {
+
+								toChainPosition.isDelete = true
+								this.instertTextChain(chainsText, markerAction, markerClose, fromCharPosition)
+							}
 						} else {
 							this.clearByMarkerAction(chainsText, fromChainPosition, toChainPosition, markerAction)
 						}
@@ -538,6 +543,7 @@ export class FormaterCommanger {
 		markers.forEach(marker => {
 			const markerOpen = marker.openToken
 			const markerClose = marker.closeToken
+			const markerAction = marker.markerAction
 
 			if (chainsText.length > 1) {
 				for (let i = 0; i < chainsText.length - 1; i++) {
@@ -554,13 +560,16 @@ export class FormaterCommanger {
 
 			let count = 0
 			chainsText.forEach(chain => {
-				const chainIsOpenMarker = chain.isOpenMarker() && !chain.isDelete
+				const chainIsOpenMarker = chain.isOpenMarker() && !chain.isDelete && chain.markerAction == markerAction
 
-				if (chain.isCloseMarker()) count = 0
+				if (chain.isCloseMarker() && chain.markerAction == markerAction
+				) count = 0
 
-				if (chainIsOpenMarker && count == 1) {
+				if (chainIsOpenMarker && count == 1 && chain.markerAction == markerAction
+				) {
 					chain.isDelete = true
-				} else if (chainIsOpenMarker && count == 0) {
+				} else if (chainIsOpenMarker && count == 0 && chain.markerAction == markerAction
+				) {
 					count = 1
 				}
 
@@ -569,12 +578,13 @@ export class FormaterCommanger {
 			count = 0
 			for (let i = chainsText.length - 1; i >= 0; i--) {
 				const current = chainsText[i]
-				if (current.isOpenMarker()) count = 0
+				if (current.isOpenMarker() && current.markerAction == markerAction
+				) count = 0
 
-				const chainIsCloseMarker = current.isCloseMarker() && !current.isDelete
-				if (chainIsCloseMarker && count == 1) {
+				const chainIsCloseMarker = current.isCloseMarker() && !current.isDelete && current.markerAction == markerAction
+				if (chainIsCloseMarker && count == 1 && current.markerAction == markerAction) {
 					current.isDelete = true
-				} else if (chainIsCloseMarker && count == 0) {
+				} else if (chainIsCloseMarker && count == 0 && current.markerAction == markerAction) {
 					count = 1
 				}
 			}

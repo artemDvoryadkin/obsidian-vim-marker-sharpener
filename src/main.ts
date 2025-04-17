@@ -11,7 +11,8 @@ import { ItalicCommand } from './commands/ItalicCommand';
 import { StrikethroughCommand } from './commands/StrikethroughCommand';
 import { CodeCommand } from './commands/CodeCommand';
 
-
+// TODO: > Этот **плагин работает корректно c выделением текста_** в режиме **vim VISUAL, VISUAL LINE**.
+// если перейти vim и снять выделение то выделение снимится в первого болда, проблема в подчеркивании _**, если убрать то работает корректно
 export default class VimMarkerPlugin extends Plugin {
 
 	commands: SharpenerCommand[] = [];
@@ -92,11 +93,11 @@ export default class VimMarkerPlugin extends Plugin {
 	private registerCommands(): void {
 		this.commands = [
 			new BoldCommand(this),
+			new CodeCommand(this),
+			new CommentCommand(this),
 			new HighlightCommand(this),
 			new ItalicCommand(this),
 			new StrikethroughCommand(this),
-			new CodeCommand(this),
-			new CommentCommand(this),
 		];
 
 		try {

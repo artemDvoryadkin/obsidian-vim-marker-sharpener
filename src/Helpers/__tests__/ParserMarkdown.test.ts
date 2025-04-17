@@ -11,7 +11,7 @@ describe('parseMarkdown', () => {
 	});
 
 	const testCases = [
-		{ input: '**Hello** __World__' },
+		{ input: '**Hello** _World_' },
 		{ input: '**H ello**' },
 		{ input: ' Do not wrap lines.' }
 	]

@@ -5,13 +5,9 @@ import { MarkerAction, FormaterCommanger } from 'src/Helpers/FormaterHelper';
 
 
 export abstract class MarkerCommandBase extends SharpenerCommand {
-	id = 'bold-command';
-	name = 'Smart Toggle Bold';
-	prefix = 'bc';
 	command: Command;
 
 	async executeBase(app: App, markerAction: MarkerAction): Promise<void> {
-
 
 		console.log("command execute", markerAction);
 		console.log("this.plugin.currentSelection", this.plugin.currentSelection);
@@ -19,7 +15,6 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 		const selectedVim = this.plugin.currentSelection;
 
 		const editorHelper = new EditorHelper(app);
-		editorHelper.activeView
 		editorHelper.editor
 
 		const formatterCommanger = new FormaterCommanger();

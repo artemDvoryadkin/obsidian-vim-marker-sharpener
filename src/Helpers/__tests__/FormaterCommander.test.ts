@@ -13,8 +13,11 @@ describe('Разное', () => {
 	// выделение строки полной
 	// TODO: ошибка нужно пофиксить ели есть символы табуляции
 	it.each([
-		{ input: "Y consistent with D and C to the end of line ", position: 3, result: "Y **consistent** with D and C to the end of line ", description: "" }
-	])(`разное ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
+		{ input: "Y consistent with D and C to the end of line ", position: 3, result: "Y **consistent** with D and C to the end of line ", description: "" },
+		{ input: "as **_bold_** or italicized", position: 17, result: "as **_bold_** or **italicized**", description: "" }
+
+
+	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
 		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
@@ -52,6 +55,7 @@ describe('Вычитание выделения болд в слове по вы
 
 	it.each([
 		{ input: "**Текст7 жирный** ", positionBeging: 9, positionEnd: 11, result: "**Текст7** жир**ный** ", description: "" },
+		{ input: "**Текст7 жирный** ", positionBeging: 8, positionEnd: 15, result: "**Текст7** жирный ", description: "" },
 	])(`Пример:$input позиция $positionBeging $positionEnd =>> $result :: $description`, ({ input, positionBeging, positionEnd, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, positionBeging, positionEnd)
 		console.log("result", result);

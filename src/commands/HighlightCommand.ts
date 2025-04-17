@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class HighlightCommand extends MarkerCommandBase {
-	id = 'highlight-command';
+	id = 'toggle-highlight';
 	name = 'Toggle Highlight';
 	prefix = '';
 	command: Command;

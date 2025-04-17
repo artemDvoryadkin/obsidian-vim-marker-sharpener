@@ -1,3 +1,4 @@
+import { off } from 'process';
 import { TextChain, MarkerType, FormaterCommanger, MarkerAction } from './FormaterHelper';
 
 export class ParserMarkdown {
@@ -77,7 +78,10 @@ export class ParserMarkdown {
 
 		while (currentIndex < line.length) {
 
+			let isFind = false
 			allMarkers.forEach(marker => {
+				if (isFind) return
+
 				const { openToken, closeToken } = marker
 				if (!openToken || !closeToken) throw new Error('Source tokens for bold not found')
 
@@ -88,12 +92,14 @@ export class ParserMarkdown {
 				foundOpenMarker = openMarker.has(marker.markerAction) ? openMarker.get(marker.markerAction)! : false
 
 				if (line.startsWith(content, currentIndex)) {
+					const offSet = closeToken.content!.length - 1
+					isFind = true
 					if (foundOpenMarker) {
 						if (
 							currentIndex + contentLength == line.length ||
 							line[currentIndex - 1] != ' ') {
 
-							const closeTokenChain = new TextChain(closeToken.type as MarkerType, currentIndex, currentIndex + 1, closeToken.content);
+							const closeTokenChain = new TextChain(closeToken.type as MarkerType, currentIndex, currentIndex + offSet, closeToken.content);
 
 							if (currentIndex != 0 && startSearchPosition != currentIndex) {
 								const text = line.substring(startSearchPosition, currentIndex);
@@ -108,7 +114,8 @@ export class ParserMarkdown {
 							currentIndex++;
 
 							//foundOpenMarker = false;
-							openMarker.set(marker.markerAction, false)
+							//openMarker.set(marker.markerAction, false)
+							openMarker.delete(marker.markerAction)
 						}
 					}
 					else if (line[currentIndex + contentLength] != ' ' && currentIndex + contentLength < line.length) {
@@ -117,7 +124,7 @@ export class ParserMarkdown {
 
 						if (currentIndex != 0 && startSearchPosition != currentIndex) {
 							const text = line.substring(startSearchPosition, currentIndex);
-							const textChain = new TextChain('text', startSearchPosition, currentIndex - 1, text);
+							const textChain = new TextChain('text', startSearchPosition, currentIndex - offSet, text);
 
 							result.push(textChain)
 						}
@@ -132,6 +139,8 @@ export class ParserMarkdown {
 						openMarker.set(marker.markerAction, true)
 
 					}
+					else
+						currentIndex++;
 				}
 				//}
 			})
@@ -140,7 +149,7 @@ export class ParserMarkdown {
 				const textChain = new TextChain('text', startSearchPosition, currentIndex, text);
 				result.push(textChain)
 			}
-			currentIndex++;
+			if (!isFind) currentIndex++;
 		}
 		// если блок block_open и следующий текстто нужно добавить в блок текста что он isBold
 		this.markeredTokens(result, 'bold')
