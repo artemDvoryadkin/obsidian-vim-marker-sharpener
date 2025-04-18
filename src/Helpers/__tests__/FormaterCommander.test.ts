@@ -19,7 +19,6 @@ describe('Разное', () => {
 
 	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -31,7 +30,6 @@ describe('РАБОЧИЙ ПРИМЕР', () => {
 		formaterCommanger = new FormaterCommanger();
 	}); test('рабочий пример2', () => {
 		const result = formaterCommanger.markerBold("**Lorem** rpsum do", 0, 14)
-		console.log("result=", result);
 		expect(result.lineText).toBe("**Lorem rpsum** do");
 	});
 	test('рабочий пример', () => {
@@ -39,7 +37,6 @@ describe('РАБОЧИЙ ПРИМЕР', () => {
 			{ input: "- [x] если не выделено и вызывается команда", positionBeging: 6, positionEnd: 10, result: "- [x] **если** не выделено и вызывается команда", description: "" }
 
 		const result = formaterCommanger.markerBold(testData.input, testData.positionBeging, testData.positionEnd)
-		console.log("result=", result);
 		expect(result.lineText).toBe(testData.result);
 		expect(result.fromSelectPosition).toBe(8);
 		expect(result.toSelectPosition).toBe(11);
@@ -58,7 +55,6 @@ describe('Вычитание выделения болд в слове по вы
 		{ input: "**Текст7 жирный** ", positionBeging: 8, positionEnd: 15, result: "**Текст7** жирный ", description: "" },
 	])(`Пример:$input позиция $positionBeging $positionEnd =>> $result :: $description`, ({ input, positionBeging, positionEnd, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, positionBeging, positionEnd)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -78,7 +74,6 @@ describe('Добавление выделения болд в слове по в
 		{ input: "  Текст7    жирный ", positionBeging: 0, positionEnd: 9, result: "  **Текст7**    жирный ", description: "выделение часли слова" }
 	])(`Пример:$input позиция $positionBeging $positionEnd =>> $result :: $description`, ({ input, positionBeging, positionEnd, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, positionBeging, positionEnd)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 
@@ -90,7 +85,6 @@ describe('Добавление выделения болд в слове по в
 		{ input: "  Текст7    жирный ", positionBeging: 0, positionEnd: 9, result: "  _Текст7_    жирный ", description: "выделение часли слова" }
 	])(`Пример:$input позиция $positionBeging $positionEnd =>> $result :: $description`, ({ input, positionBeging, positionEnd, result, description }) => {
 		const resultCall = formaterCommanger.markerItalic(input, positionBeging, positionEnd)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -111,7 +105,6 @@ describe('Разное', () => {
 		const chainsText = parser.parseLine(input, fromPosition, toPosition)
 
 		const resultCall = formaterCommanger.markerBold(input, fromPosition, toPosition)
-		console.log("result", resultCall);
 		expect(resultCall.lineText).toBe(result);
 		expect(resultCall.fromSelectPosition).toBe(fromSelectPosition);
 		expect(resultCall.toSelectPosition).toBe(toSelectPosition);
@@ -124,7 +117,6 @@ describe('Разное', () => {
 		const parser = new ParserMarkdown();
 		const chainsText = parser.parseLine(input)
 		const clearPosition = parser.getClearPosition(position, 'bold', chainsText)
-		console.log("result", result);
 		expect(clearPosition).toBe(result);
 
 		const positionByClearPosition = parser.getPositionByClearPosition(clearPosition, chainsText)
@@ -139,7 +131,6 @@ describe('Разное', () => {
 		{ input: "Y consistent with D and C to the end of line ", position: 3, result: "Y **consistent** with D and C to the end of line ", description: "" }
 	])(`разное ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 
@@ -149,7 +140,6 @@ describe('Разное', () => {
 		, { input: "Текст5\nжирный ", position: 6, result: "Текст5\nжирный ", description: "" }
 	])(`пробел не выделяется ->> Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -165,7 +155,6 @@ describe('добавление выделения болд в слове при 
 		{ input: "Текст5 **жир**ный ", from: 0, to: 9, result: "**Текст5 жир**ный ", description: "" }
 	])(`Пример:$input позиция $from $to =>> $result :: $description`, ({ input, from, to, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, from, to)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 
@@ -174,7 +163,6 @@ describe('добавление выделения болд в слове при 
 		/*{ input: "Текст5 ~~жир~~ный ", from: 0, to: 9, result: "~~Текст5 жир~~ный ", description: "" }*/
 	])(`Пример:$input позиция $from $to =>> $result :: $description`, ({ input, from, to, result, description }) => {
 		const resultCall = formaterCommanger.markerStrikethrough(input, from, to)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -201,7 +189,6 @@ describe('объединение выделений болд', () => {
 	it.each(testCases)(
 		`Пример:$input позиция $from $to =>> $result :: $description`, ({ input, from, to, result, description }) => {
 			const resultCall = formaterCommanger.markerBold(input, from, to)
-			console.log("result", result);
 			expect(resultCall.lineText).toBe(result);
 		}
 	);
@@ -212,7 +199,6 @@ describe('объединение выделений болд', () => {
 		{ input: "**Текст7** жирный **второе выделение**", from: 5, to: 25, result: "**Текст7 жирный второе выделение**", description: "" }
 	])(`Пример:$input позиция $from $to =>> $result :: $description`, ({ input, from, to, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, from, to)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -229,7 +215,6 @@ describe('добавление выделения болд в слове', () =>
 		, { input: "Текст жи**р**ный ", position: 13, result: "Текст жи**рный** ", description: "часть слова после выделения" }
 	])(`Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -248,7 +233,6 @@ describe('Снятие выделения выделением слова', () =
 		{ input: "**exmap editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", position: 0, positionTo: 7, result: "exmap **editorToggleComment obcommand** vim-marker-sharpener:toggle-comment ", description: "четвертая звезда" },
 	])(`Пример:$input позиция $position, $positionTo =>> $result :: $description`, ({ input, position, positionTo, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position, positionTo)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -268,7 +252,6 @@ describe('Снятие выделения болд со слова', () => {
 		, { input: "Текст5 **жирный** ", position: 16, result: "Текст5 жирный ", description: "четвертая звезда" }
 	])(`Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })
@@ -290,7 +273,6 @@ describe('Снимаем выделение болд в букве слова', 
 		, { input: "**слово**", position: 3, result: "слово", description: "" }
 	])(`Пример:$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.markerBold(input, position)
-		console.log("result", result);
 		expect(resultCall.lineText).toBe(result);
 	})
 })

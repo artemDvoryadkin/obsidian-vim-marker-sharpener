@@ -1,6 +1,5 @@
 import { Command, Plugin, App } from 'obsidian';
 import VimMarkerPlugin from 'src/main';
-import { MyPluginSettings } from 'src/SettingTab';
 
 
 export abstract class SharpenerCommand {
@@ -17,7 +16,6 @@ export abstract class SharpenerCommand {
 	abstract execute(app: App): void | Promise<void>;
 
 	check(app: App, checking: boolean): boolean {
-		//		console.log("check", { checking });
 		if (!checking) {
 			this.execute(app);
 			return true;
@@ -31,9 +29,5 @@ export abstract class SharpenerCommand {
 
 	getCommandOfPlugin(type: typeof SharpenerCommand): Command {
 		return this.getMyPlugin().commands.find(command => command instanceof type) as Command;
-	}
-
-	getPluginSettings(): MyPluginSettings {
-		return this.getMyPlugin().settings;
 	}
 }

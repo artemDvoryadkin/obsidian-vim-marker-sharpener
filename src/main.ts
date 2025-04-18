@@ -1,7 +1,6 @@
 import { App, EditorSelection, Plugin, PluginManifest, } from 'obsidian';
 
 import { SharpenerCommand } from './Commons/SharpenerCommand';
-import { DEFAULT_SETTINGS, MyPluginSettings, VimMarkerSharpenerSettingTab } from './SettingTab';
 import { EditorHelper } from './Helpers/EditorHelper';
 
 import { HighlightCommand } from './commands/HighlightCommand';
@@ -16,7 +15,6 @@ import { CodeCommand } from './commands/CodeCommand';
 export default class VimMarkerPlugin extends Plugin {
 
 	commands: SharpenerCommand[] = [];
-	settings: MyPluginSettings;
 	readonly pluginName: string
 	currentSelection: [EditorSelection] | null = null;
 
@@ -29,7 +27,7 @@ export default class VimMarkerPlugin extends Plugin {
 	async onload() {
 		console.log('loading %s plugin v%s ...', this.manifest.name, this.manifest.version);
 
-		await this.loadSettings();
+		//await this.loadSettings();
 		this.initializePlugin();
 		this.registerEventHandlers();
 		this.registerCommands();
@@ -63,12 +61,9 @@ export default class VimMarkerPlugin extends Plugin {
 	}
 	async updateSelection(cm: any) {
 
-		//console.log("currentSelection-0", this.currentSelection)
 		const selection = cm.listSelections()[0]
 		const editorHelper = { anchor: { ch: selection.anchor.ch, line: selection.anchor.line }, head: { ch: selection.head.ch, line: selection.head.line } }
-		//console.log("currentSelection-", editorHelper)
 		this.currentSelection = [editorHelper];
-		//console.log("currentSelection-1", this.currentSelection, this.currentSelection[0].anchor.ch, this.currentSelection[0].head.ch)
 	}
 
 	private getCursorActivityHandlers(cm: CodeMirror.Editor) {
@@ -76,7 +71,6 @@ export default class VimMarkerPlugin extends Plugin {
 	}
 
 	private initializePlugin(): void {
-		this.addSettingTab(new VimMarkerSharpenerSettingTab(this.app, this));
 	}
 
 
@@ -114,13 +108,7 @@ export default class VimMarkerPlugin extends Plugin {
 		}
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
 
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
 
 	onunload() {
 		console.log(`onunload ${this.pluginName}`);

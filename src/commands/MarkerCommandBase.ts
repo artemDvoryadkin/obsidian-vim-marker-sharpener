@@ -9,8 +9,6 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 
 	async executeBase(app: App, markerAction: MarkerAction): Promise<void> {
 
-		console.log("command execute", markerAction);
-		console.log("this.plugin.currentSelection", this.plugin.currentSelection);
 		//ставим ервым так как елси ктото всызовет измение leaf ,то выделение пропадет
 		const selectedVim = this.plugin.currentSelection;
 
@@ -29,7 +27,6 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 
 			if (from.ch == -1) from.ch = 0;
 
-			console.log("command isSelected", { from, to, selectedVim: selectedVim[0] }, from, to);
 			if (from.line > to.line || from.line == to.line && from.ch > to.ch)
 				[from, to] = [to, from];
 
@@ -43,7 +40,6 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 
 			const selected = { anchor: { ch: from.ch, line: from.line }, head: { ch: to.ch - 1, line: to.line } };
 			const newLinesText = formatterCommanger.markerMultiline(markerAction, lines, selected);
-			console.log("newLinesText", newLinesText, selected);
 
 			let changesLines = false;
 			for (let i = 0; i < newLinesText.length; i++) {

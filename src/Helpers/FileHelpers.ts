@@ -67,7 +67,6 @@ export class FileHelper {
 		return this.app.workspace.getActiveFile();
 	}
 	getActiveView(): MarkdownView | null {
-		console.log("app", this.app, this.app.workspace);
 		return this.app.workspace.getActiveViewOfType(MarkdownView);
 	}
 
@@ -76,7 +75,6 @@ export class FileHelper {
 	}
 	isPdfFileActive(): boolean {
 		const activeFile = this.getActiveTFile();
-		console.log("activeFile -", activeFile);
 		return activeFile?.extension === "pdf";
 	}
 	isMdFileActive(): boolean {
@@ -139,7 +137,6 @@ export class FileHelper {
 		const generateId = async (): Promise<string> => {
 			const id = await sha256(currentDate.toISOString());
 			const isUnique = await checkIdUniqueness(id);
-			console.log("generateId", { id, isUnique });
 			return isUnique ? await generateId() : id; // Corrected typo here
 		};
 
@@ -150,7 +147,6 @@ export class FileHelper {
 	removeBracketsAndText(input: string): string {
 
 		const regex1 = /\[([^\]]+)\]\(.*?\)/; // Регулярное выражение для поиска шаблона []()
-		//console.log("input", { input });
 		const match1 = input.match(regex1);
 		if (match1) {
 			return match1[1].trim(); // Возвращаем текст в [] если шаблон найден
@@ -186,17 +182,14 @@ export class FileHelper {
 		}
 
 		const linkedMentions = fileCache.links.map(link => `[[${link.link}]]`);
-		console.log("linkedMentions", linkedMentions);
 		return linkedMentions;
 	}
 
 	getLinkedMentions2(file: TFile): string[] {
 		const metadataCache = this.app.metadataCache;
 		//const fileCache = metadataCache.resolvedLinks[file.path];
-		console.log("metadataCache", metadataCache.unresolvedLinks);
 		const fileCache = metadataCache.unresolvedLinks[file.path];
 
-		console.log("linkedMentions2-", fileCache);
 		if (!fileCache) {
 			return [];
 		}
@@ -211,11 +204,9 @@ export class FileHelper {
 
 		const cache = this.app.metadataCache.getFileCache(file);
 		const headings = cache?.headings || [];
-		console.log("headings", headings);
 		const clearHEaderTitle = headerTitle.replace(/^#{1,6}\s*/, '').trim();
 
-		console.log("cache", cache);
-		const cachedLines = cache?.sections ? Object.values(cache.sections).every(section => { console.log("section", { section }); return true }) : [];
+		const cachedLines = cache?.sections ?? [];
 
 		if (headings.some(heading => heading.heading === clearHEaderTitle)) {
 
@@ -232,7 +223,6 @@ export class FileHelper {
 			}
 
 			const result = { start: startLine, end: endLine }
-			console.log("findHeaderLineNumbers", { result, startLine, endLine, currentHeader, lines });
 
 			return result;
 		}
@@ -263,10 +253,8 @@ export class FileHelper {
 		const lastOffset = this.getLastOffset(file);
 
 		const headerLineNumbers = await this.findHeaderLineNumbers(headerTitle, file);
-		console.log("headerLineNumbers", headerLineNumbers);
 
 		if (!headerLineNumbers) {
-			console.log("changeInsideHeaderText.dont find headerLineNumbers", { headerTitle, newText, file, headerLineNumbers });
 			return;
 		}
 
@@ -287,7 +275,6 @@ export class FileHelper {
 		await this.app.vault.read(file);
 
 		const headerLineNumbers = await this.findHeaderLineNumbers(oldHeaderTitle, file);
-		console.log("headerLineNumbers", headerLineNumbers);
 
 		if (!headerLineNumbers) {
 			const sections = this.app.metadataCache.getFileCache(file)?.sections;
@@ -300,7 +287,6 @@ export class FileHelper {
 			return;
 
 		}
-		console.log("changeHeaderText", { oldHeaderTitle, newHeaderTitle, newText, file, headerLineNumbers });
 
 		if (headerLineNumbers) {
 			const start = headerLineNumbers.start;
@@ -323,43 +309,33 @@ export class FileHelper {
 	async getPathListsToRoot(file: TFile, currentPath: string[] = []): Promise<string[][]> {
 		const frontmatter = this.getFrontmatter(file);
 		const entityParentEntity = frontmatter["entity_ParentItem"];
-		console.log("entityParentEntity", entityParentEntity);
 		if (!entityParentEntity) {
 			return []; // Return an empty array instead of currentPath
 		}
 
 		const parentEntities = Array.isArray(entityParentEntity) ? entityParentEntity : [entityParentEntity];
 		const paths: string[][] = [];
-		console.log("parentEntities", parentEntities);
 		for (const parent of parentEntities) {
 			const cleanedParent = this.removeBracketsAndText(parent);
-			console.log("cleanedParent", cleanedParent);
 			const parentFiles = this.app.vault.getMarkdownFiles();
 
 			const parentFile = parentFiles.find(file => file.basename === cleanedParent && file.extension === "md");
-			console.log("parentFile", parentFile);
 
 			if (parentFile instanceof TFile) {
-				console.log("parentFile---", parentFile);
 				if (cleanedParent === file.basename) {
 					// Reached the root where the file references itself
 					paths.push([...currentPath]);
-					console.log("paths1$", paths);
 					break;
 				} else {
 					// Check if the parent file is a root entity, if so, exit
 					// Recursively find paths for the parent file
 					const parentPaths = await this.getPathListsToRoot(parentFile, [...currentPath, cleanedParent]);
-					console.log("parentPaths", parentPaths);
 					if (parentPaths.length > 0) {
 						paths.push(...parentPaths);
 					}
-					console.log("paths2$", paths);
 				}
 			}
 		}
-		console.log("paths3$", paths);
-		console.log("currentPath", currentPath);
 		return paths;
 	}
 
@@ -393,14 +369,12 @@ export class FileHelper {
 
 		const headingsExt = headings.map(heading => {
 			const lines = this.getLinesForHeading(file, heading);
-			console.log("lines", lines);
 			const headingExt = new HeadingCacheExt(heading);
 			headingExt.lines = lines;
 			headingExt.linesWithMarkdown = lines.map(line => this.addMarkdown(line));
 			headingExt.linesWithMarkdownAndHeaders = lines.map(line => this.addMarkdownAndHeaders(line));
 			headingExt.headingSource = heading
 
-			console.log("headingExt", headingExt, headingExt.lines);
 			return headingExt;
 		});
 
@@ -493,7 +467,6 @@ export class FileHelper {
 	}
 	private getLinesForHeading(file: TFile, heading: HeadingCache): string[] {
 		// Implement logic to extract lines for the given heading
-		console.log("getLinesForHeading", { file, heading });
 		return [];
 	}
 

@@ -52,7 +52,6 @@ export class EditorHelper {
 	async getClipboardText() {
 		try {
 			const text = await navigator.clipboard.readText();
-			console.log("Clipboard content:", text);
 			return text;
 		} catch (err) {
 			console.error("Failed to read clipboard:", err);
@@ -106,18 +105,14 @@ export class EditorHelper {
 
 	async splitLiafVertical(filePath: string, activeLeaf = true, before = true): Promise<WorkspaceLeaf | null> {
 
-		console.log("splitLiafVertical1", filePath, this.app.vault);
 
 		const newFile = this.app.vault.getAbstractFileByPath(filePath);
-		console.log("splitLiafVertical1", newFile);
 
-		console.log("splitLiafVertical2", newFile, filePath);
 		if (newFile instanceof TFile && this.activeLeaf) {
 
 			//const rightLeaf = this.app.workspace.getLeaf('split', 'vertical');
 
 			const rightLeaf = this.app.workspace.createLeafBySplit(this.activeLeaf, 'vertical', before);
-			console.log("activeLeaf", this.activeLeaf)
 			await rightLeaf.openFile(newFile, { active: activeLeaf });
 
 			return rightLeaf;
@@ -133,12 +128,10 @@ export class EditorHelper {
 	}
 
 	getLeafByFilePath(filePath: string): WorkspaceLeaf | null {
-		console.log("getLeafByFilePath", filePath);
 		let sleaf: WorkspaceLeaf | null = null;
 		this.app.workspace.iterateAllLeaves(leaf => {
 			const viewState = leaf.getViewState();
 			const file = viewState && viewState.state && viewState.state.file;
-			//console.log("getLeafByFilePath", { leaf, filePath, file })
 			if (file === filePath) {
 				sleaf = leaf;
 				return true;
@@ -152,7 +145,6 @@ export class EditorHelper {
 	private findHeaderLine(startLine: number, direction: number, level?: number): number | null {
 		const lines = this.getLines();
 
-		console.log("finHeaderLine", { startLine, direction, level })
 		for (let i = startLine; i >= 0 && i < lines.length; i += direction) {
 			const line = lines[i];
 			const headerMatch = line.match(/^(#{1,6})\s/);
@@ -160,7 +152,6 @@ export class EditorHelper {
 			if (headerMatch) {
 
 				//const currentLevel = this.getHeaderLevel(i)
-				console.log("header", line)
 				const headerLevel = headerMatch[1].length;
 				if (level !== undefined && level !== null && level > 0 && headerLevel <= level) return i
 
@@ -212,7 +203,6 @@ export class EditorHelper {
 	findNextHeaderWithCurrentLevel(): number | null {
 		const currentHeaderLine = this.getCurrentHeaderLine()
 		const currentHeaderLevel = this.getCurrentHeaderLevel()
-		console.log("findNextHeaderWithCurrentLevel", { currentHeaderLine, currentHeaderLevel })
 		if (currentHeaderLine !== null && currentHeaderLevel !== null) {
 			const nextHeaderLine = this.findHeaderLine(currentHeaderLine + 1, 1, currentHeaderLevel)
 
@@ -229,13 +219,11 @@ export class EditorHelper {
 		const currentLine = this.editor.getCursor().line;
 		const currentHeaderLine = this.getCurrentHeaderLine()
 		const currentHeaderLevel = this.getCurrentHeaderLevel()
-		console.log("findPreviousHeaderWithCurrentLevel", { currentHeaderLine, currentHeaderLevel })
 
 		if (currentLine !== currentHeaderLine) return currentHeaderLine
 
 		if (currentHeaderLine !== null && currentHeaderLevel !== null) {
 			const prevHeaderLine = this.findHeaderLine(currentHeaderLine - 1, -1, currentHeaderLevel)
-			console.log(prevHeaderLine)
 			if (prevHeaderLine !== null) {
 				return prevHeaderLine
 			}
@@ -273,7 +261,6 @@ export class EditorHelper {
 		const currentLine = this.editor.getCursor().line;
 		const currentHeaderLine = this.findCurrentHeaderLine();
 
-		console.log("findHeaderAbove", { currentHeaderLine, currentLine })
 		if (currentHeaderLine !== null && currentHeaderLine < currentLine) {
 			return currentHeaderLine
 		}
@@ -343,7 +330,6 @@ export class EditorHelper {
 		const currentLine = this.editor.getCursor().line;
 		const nextPatternLine = this.findPageLine(currentLine + 1, 1)
 
-		console.log("nextPatternLine", nextPatternLine)
 		if (nextPatternLine !== null) {
 			this.moveToLineAndScroll(nextPatternLine + 0);
 		} else {
@@ -359,8 +345,6 @@ export class EditorHelper {
 		const currentLine = this.editor.getCursor().line;
 		let prevPatternLine = this.findPageLine(currentLine - 1, -1);
 
-		console.log(".i..")
-		console.log("prevPatternLine", prevPatternLine)
 		if (prevPatternLine !== null) {
 			this.moveToLineAndScroll(prevPatternLine - 0);
 		} else {

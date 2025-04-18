@@ -250,11 +250,9 @@ export class FormaterCommanger {
 	}
 
 	markerMarkerAction(markerAction: MarkerAction, textLine: string, fromCharPosition: number, toCharPosition?: number): LineTextResult {
-		console.log("action:", markerAction, { textLine, fromCharPosition, toCharPosition })
 
 		const parser = new ParserMarkdown();
 		const chainsText = parser.parseLine(textLine, fromCharPosition, toCharPosition);
-		console.log("parser", chainsText)
 
 		const clearPositionFrom = parser.getClearPosition(fromCharPosition, markerAction, chainsText)
 
@@ -360,7 +358,6 @@ export class FormaterCommanger {
 				}
 			}
 		}
-		console.log("chainsText", chainsText)
 
 		const lineText = this.optimizeChain(chainsText)
 

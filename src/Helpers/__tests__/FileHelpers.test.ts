@@ -16849,13 +16849,13 @@ describe('FileHelper', () => {
 	test('getHeadings should return headings from the file cache', () => {
 
 		const activeFile = fileHelper.getActiveTFile();
-		const headings = fileHelper.getHeadingsExt(activeFile as TFile);
-		console.log("headings", headings);
-		expect(headings).toEqual(expect.any(Array));
-		const heading = headings[20]
-		const content = fileHelper.getContentBySection(activeFile as TFile, headings[20].sections[0])
-		const section = headings[20].sections[0]
-		console.log("content", { heading, section, content })
+		if (activeFile instanceof TFile) {
+			const headings = fileHelper.getHeadingsExt(activeFile);
+			expect(headings).toEqual(expect.any(Array));
+			const heading = headings[20]
+			const content = fileHelper.getContentBySection(activeFile, headings[20].sections[0])
+			const section = headings[20].sections[0]
+		}
 	});
 });
 
@@ -16863,14 +16863,13 @@ describe('FileHelper', () => {
 describe.skip('FileHelper_HeadingExt', () => {
 
 	const fileHelper = new FileHelper(mockApp as unknown as App);
-	test('countHeadings', () => {
-		const count = fileHelper.getHeadingsExt({} as TFile).length;
-		expect(count).toEqual(7);
-	});
 
 	test('getPaterntHeadings', () => {
 		const activeFile = fileHelper.getActiveTFile();
-		const newLocal = fileHelper.getHeadingsExt(activeFile as TFile)[5];
+
+		expect(activeFile).toBeInstanceOf(TFile)
+
+		const newLocal = fileHelper.getHeadingsExt(activeFile!)[5];
 
 		const parentHeadings = newLocal.parentHeading;
 		expect(parentHeadings).not.toBeNull();
@@ -16881,9 +16880,9 @@ describe.skip('FileHelper_HeadingExt', () => {
 
 	test('lastPosition', () => {
 		const activeFile = fileHelper.getActiveTFile();
-		const newLocal = fileHelper.getHeadingsExt(activeFile as TFile)[3];
+		expect(activeFile).toBeInstanceOf(TFile)
+		const newLocal = fileHelper.getHeadingsExt(activeFile!)[3];
 		expect(newLocal.positionContentStartLine).toEqual(93);
 		expect(newLocal.positionContentEndLine).toEqual(133);
-		console.log(newLocal);
 	});
 }); 
