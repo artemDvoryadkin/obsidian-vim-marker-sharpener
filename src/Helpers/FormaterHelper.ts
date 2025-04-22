@@ -24,7 +24,7 @@ export class TextChain {
 	constructor(type: MarkerType, from?: number, to?: number, content?: string);
 	constructor(type: MarkerType, from?: number, to?: number, content?: string, isNew?: boolean);
 
-	constructor(type: MarkerType, from: number = -1, to: number = -1, content?: string, isNew: boolean = false, fromSelectedPosition?: number, toSelectedPosition?: number) {
+	constructor(type: MarkerType, from = -1, to = -1, content?: string, isNew = false, fromSelectedPosition?: number, toSelectedPosition?: number) {
 		this.content = content || ''
 
 		if (type == 'bold_open') { this.isBold = true; this.content = '**' }
@@ -321,14 +321,14 @@ export class FormaterCommanger {
 		if (markerAction == 'comment') return ['comment_open', 'comment_close']
 		return []
 	}
-	private createOpenTag(markerAction: MarkerAction, isNew: boolean = false): TextChain {
+	private createOpenTag(markerAction: MarkerAction, isNew = false): TextChain {
 		const [openTag, closeTag] = this.getTags(markerAction);
-		return new TextChain(openTag, -1, -1, undefined, true)
+		return new TextChain(openTag, -1, -1, undefined, isNew)
 	}
 
-	private createCloseTag(markerAction: MarkerAction, isNew: boolean = false): TextChain {
+	private createCloseTag(markerAction: MarkerAction, isNew = false): TextChain {
 		const [openTag, closeTag] = this.getTags(markerAction);
-		return new TextChain(closeTag, -1, -1, undefined, true)
+		return new TextChain(closeTag, -1, -1, undefined, isNew)
 	}
 
 	getIsFlagByMarkerAction(markerAction: MarkerAction, chain: TextChain): boolean {
@@ -365,7 +365,7 @@ export class FormaterCommanger {
 
 		const clearPositionFrom = parser.getClearPosition(fromCharPosition, markerAction, chainsText)
 
-		let fromChainPosition = parser.getTextChain(chainsText, fromCharPosition)
+		const fromChainPosition = parser.getTextChain(chainsText, fromCharPosition)
 
 		const [openTag, closeTag] = this.getTags(markerAction);
 		let clearPositionTo: number | undefined
@@ -580,12 +580,12 @@ export class FormaterCommanger {
 		// нужно от fromIndex пройти в лево и право по моссиву и если блок isbold, то снять его, если это тип bold_open или bold_close, то isDelete = true, как только блок не isbold, то остановиться
 		let leftIndex = fromIndex
 		let rightIndex = fromIndex
-		const self = this;
+		const _self = this;
 
 		function clearLeft(chainsText: TextChain[], fromIndex: number) {
 			for (let i = fromIndex; i >= 0; i--) {
 
-				const isFlag = self.getIsFlagByMarkerAction(markerAction, chainsText[i])
+				const isFlag = _self.getIsFlagByMarkerAction(markerAction, chainsText[i])
 				if (isFlag) { leftIndex = i }
 				else { break }
 			}
@@ -594,7 +594,7 @@ export class FormaterCommanger {
 
 		function clearRight(chainsText: TextChain[], fromIndex: number) {
 			for (let i = fromIndex; i < chainsText.length; i++) {
-				const isFlag = self.getIsFlagByMarkerAction(markerAction, chainsText[i])
+				const isFlag = _self.getIsFlagByMarkerAction(markerAction, chainsText[i])
 				if (isFlag) { rightIndex = i }
 				else { break }
 			}
@@ -603,13 +603,13 @@ export class FormaterCommanger {
 		function markMarkerAction(chainsText: TextChain[], fromIndex: number, toIndex: number) {
 
 			for (let i = fromIndex; i <= toIndex; i++) {
-				const isFlag = self.getIsFlagByMarkerAction(markerAction, chainsText[i])
+				const isFlag = _self.getIsFlagByMarkerAction(markerAction, chainsText[i])
 				if (isFlag && chainsText[i].type == 'text') {
-					self.setFlagByMarkerAction(markerAction, chainsText[i], false)
+					_self.setFlagByMarkerAction(markerAction, chainsText[i], false)
 				}
 				else if (isFlag && (chainsText[i].type == openTag || chainsText[i].type == closeTag)) {
 					chainsText[i].isDelete = true
-					self.setFlagByMarkerAction(markerAction, chainsText[i], false)
+					_self.setFlagByMarkerAction(markerAction, chainsText[i], false)
 				}
 			}
 		}

@@ -2,7 +2,7 @@
 import * as path from 'path';
 import { App, TFile } from 'obsidian';
 import * as fs from 'fs';
-import { FileHelper } from 'obsidian-sharpener-common/FileHelpers';
+import { FileHelper } from '../FileHelpers';
 
 // Mocking the App and TFile classes
 let testData = fs.readFileSync(path.join("/Users/artemdvoryadkin/Projects/obsidian-sharpener/src/Helpers/__tests__/", 'testData.md'), 'utf8');
