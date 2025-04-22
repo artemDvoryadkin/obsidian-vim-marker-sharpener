@@ -1,9 +1,8 @@
-import { FileHelper } from '../FileHelpers';
 
 import * as path from 'path';
 import { App, TFile } from 'obsidian';
 import * as fs from 'fs';
-import { promises } from 'fs';
+import { FileHelper } from 'obsidian-sharpener-common/FileHelpers';
 
 // Mocking the App and TFile classes
 let testData = fs.readFileSync(path.join("/Users/artemdvoryadkin/Projects/obsidian-sharpener/src/Helpers/__tests__/", 'testData.md'), 'utf8');
@@ -1599,40 +1598,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=71&selection=1,0,3,20",
-					"original": "[p.71](Второй_мозг.pdf#page=71&selection=1,0,3,20)",
-					"displayText": "p.71",
-					"position": {
-						"start": {
-							"line": 302,
-							"col": 138,
-							"offset": 30962
-						},
-						"end": {
-							"line": 302,
-							"col": 188,
-							"offset": 31012
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=71&selection=6,0,11,37",
-					"original": "[p.71](Второй_мозг.pdf#page=71&selection=6,0,11,37)",
-					"displayText": "p.71",
-					"position": {
-						"start": {
-							"line": 304,
-							"col": 308,
-							"offset": 31322
-						},
-						"end": {
-							"line": 304,
-							"col": 359,
-							"offset": 31373
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=71&selection=11,39,25,2",
 					"original": "[p.71](Второй_мозг.pdf#page=71&selection=11,39,25,2)",
 					"displayText": "p.71",
@@ -2398,23 +2363,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=88&selection=1,0,5,38",
-					"original": "[p.88](Второй_мозг.pdf#page=88&selection=1,0,5,38)",
-					"displayText": "p.88",
-					"position": {
-						"start": {
-							"line": 417,
-							"col": 279,
-							"offset": 45177
-						},
-						"end": {
-							"line": 417,
-							"col": 329,
-							"offset": 45227
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=88&selection=6,0,16,55",
 					"original": "[p.88](Второй_мозг.pdf#page=88&selection=6,0,16,55)",
 					"displayText": "p.88",
@@ -2428,23 +2376,6 @@ const mockApp = {
 							"line": 419,
 							"col": 673,
 							"offset": 45902
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=88&selection=36,0,37,39",
-					"original": "[page](Второй_мозг.pdf#page=88&selection=36,0,37,39)",
-					"displayText": "page",
-					"position": {
-						"start": {
-							"line": 421,
-							"col": 59,
-							"offset": 45963
-						},
-						"end": {
-							"line": 421,
-							"col": 111,
-							"offset": 46015
 						}
 					}
 				},
@@ -3197,40 +3128,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=117&selection=21,0,25,61&color=yellow",
-					"original": "[p.117](Второй_мозг.pdf#page=117&selection=21,0,25,61&color=yellow)",
-					"displayText": "p.117",
-					"position": {
-						"start": {
-							"line": 529,
-							"col": 306,
-							"offset": 58630
-						},
-						"end": {
-							"line": 529,
-							"col": 373,
-							"offset": 58697
-						}
-					}
-				},
-				{
-					"link": "PARA.md",
-					"original": "[PARA](PARA.md)",
-					"displayText": "PARA",
-					"position": {
-						"start": {
-							"line": 531,
-							"col": 69,
-							"offset": 58768
-						},
-						"end": {
-							"line": 531,
-							"col": 84,
-							"offset": 58783
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=117&selection=26,0,31,34&color=yellow",
 					"original": "[p.117](Второй_мозг.pdf#page=117&selection=26,0,31,34&color=yellow)",
 					"displayText": "p.117",
@@ -3261,23 +3158,6 @@ const mockApp = {
 							"line": 533,
 							"col": 97,
 							"offset": 59206
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=121&selection=35,0,35,49&color=yellow",
-					"original": "[p.121](Второй_мозг.pdf#page=121&selection=35,0,35,49&color=yellow)",
-					"displayText": "p.121",
-					"position": {
-						"start": {
-							"line": 538,
-							"col": 52,
-							"offset": 59388
-						},
-						"end": {
-							"line": 538,
-							"col": 119,
-							"offset": 59455
 						}
 					}
 				},
@@ -3996,40 +3876,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=148&selection=1,0,11,16",
-					"original": "[p.148](Второй_мозг.pdf#page=148&selection=1,0,11,16)",
-					"displayText": "p.148",
-					"position": {
-						"start": {
-							"line": 625,
-							"col": 469,
-							"offset": 69756
-						},
-						"end": {
-							"line": 625,
-							"col": 522,
-							"offset": 69809
-						}
-					}
-				},
-				{
-					"link": "Принцип.md",
-					"original": "[Принцип](Принцип.md)",
-					"displayText": "Принцип",
-					"position": {
-						"start": {
-							"line": 627,
-							"col": 7,
-							"offset": 69820
-						},
-						"end": {
-							"line": 627,
-							"col": 28,
-							"offset": 69841
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=148&selection=35,2,42,33",
 					"original": "[p.148](Второй_мозг.pdf#page=148&selection=35,2,42,33)",
 					"displayText": "p.148",
@@ -4094,23 +3940,6 @@ const mockApp = {
 							"line": 633,
 							"col": 220,
 							"offset": 70858
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=149&selection=15,0,28,11",
-					"original": "[p.149](Второй_мозг.pdf#page=149&selection=15,0,28,11)",
-					"displayText": "p.149",
-					"position": {
-						"start": {
-							"line": 635,
-							"col": 181,
-							"offset": 71041
-						},
-						"end": {
-							"line": 635,
-							"col": 235,
-							"offset": 71095
 						}
 					}
 				},
@@ -4795,23 +4624,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=173",
-					"original": "[p.173](Второй_мозг.pdf#page=173)",
-					"displayText": "p.173",
-					"position": {
-						"start": {
-							"line": 739,
-							"col": 0,
-							"offset": 81586
-						},
-						"end": {
-							"line": 739,
-							"col": 33,
-							"offset": 81619
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=173&selection=18,0,18,45",
 					"original": "[p.173](Второй_мозг.pdf#page=173&selection=18,0,18,45)",
 					"displayText": "p.173",
@@ -4910,23 +4722,6 @@ const mockApp = {
 							"line": 750,
 							"col": 94,
 							"offset": 82684
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=177&selection=7,0,9,36",
-					"original": "[p.177](Второй_мозг.pdf#page=177&selection=7,0,9,36)",
-					"displayText": "p.177",
-					"position": {
-						"start": {
-							"line": 752,
-							"col": 150,
-							"offset": 82836
-						},
-						"end": {
-							"line": 752,
-							"col": 202,
-							"offset": 82888
 						}
 					}
 				},
@@ -5594,23 +5389,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=208&selection=24,0,26,6",
-					"original": "[p.208](Второй_мозг.pdf#page=208&selection=24,0,26,6)",
-					"displayText": "p.208",
-					"position": {
-						"start": {
-							"line": 835,
-							"col": 117,
-							"offset": 90723
-						},
-						"end": {
-							"line": 835,
-							"col": 170,
-							"offset": 90776
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=208&selection=30,0,38,5",
 					"original": "[p.208](Второй_мозг.pdf#page=208&selection=30,0,38,5)",
 					"displayText": "p.208",
@@ -5726,23 +5504,6 @@ const mockApp = {
 							"line": 849,
 							"col": 117,
 							"offset": 92442
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=210&selection=27,0,30,52",
-					"original": "[p.210](Второй_мозг.pdf#page=210&selection=27,0,30,52)",
-					"displayText": "p.210",
-					"position": {
-						"start": {
-							"line": 851,
-							"col": 162,
-							"offset": 92607
-						},
-						"end": {
-							"line": 851,
-							"col": 216,
-							"offset": 92661
 						}
 					}
 				},
@@ -6393,23 +6154,6 @@ const mockApp = {
 					}
 				},
 				{
-					"link": "Второй_мозг.pdf#page=221&selection=56,0,59,14",
-					"original": "[p.221](Второй_мозг.pdf#page=221&selection=56,0,59,14)",
-					"displayText": "p.221",
-					"position": {
-						"start": {
-							"line": 954,
-							"col": 188,
-							"offset": 103781
-						},
-						"end": {
-							"line": 954,
-							"col": 242,
-							"offset": 103835
-						}
-					}
-				},
-				{
 					"link": "Второй_мозг.pdf#page=222&selection=22,0,24,13&color=h3",
 					"original": "[p.222](Второй_мозг.pdf#page=222&selection=22,0,24,13&color=h3)",
 					"displayText": "p.222",
@@ -6440,23 +6184,6 @@ const mockApp = {
 							"line": 958,
 							"col": 184,
 							"offset": 104175
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=222&selection=27,0,31,1&color=outlink",
-					"original": "[p.222](Второй_мозг.pdf#page=222&selection=27,0,31,1&color=outlink)",
-					"displayText": "p.222",
-					"position": {
-						"start": {
-							"line": 958,
-							"col": 188,
-							"offset": 104179
-						},
-						"end": {
-							"line": 958,
-							"col": 255,
-							"offset": 104246
 						}
 					}
 				},
@@ -6559,23 +6286,6 @@ const mockApp = {
 							"line": 969,
 							"col": 119,
 							"offset": 105095
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=226&selection=2,0,3,28&color=h3",
-					"original": "[p.226](Второй_мозг.pdf#page=226&selection=2,0,3,28&color=h3)",
-					"displayText": "p.226",
-					"position": {
-						"start": {
-							"line": 971,
-							"col": 61,
-							"offset": 105159
-						},
-						"end": {
-							"line": 971,
-							"col": 122,
-							"offset": 105220
 						}
 					}
 				},
@@ -7069,23 +6779,6 @@ const mockApp = {
 							"line": 1043,
 							"col": 92,
 							"offset": 111869
-						}
-					}
-				},
-				{
-					"link": "Второй_мозг.pdf#page=243&selection=15,0,19,30&color=outlink",
-					"original": "[p.243](Второй_мозг.pdf#page=243&selection=15,0,19,30&color=outlink)",
-					"displayText": "p.243",
-					"position": {
-						"start": {
-							"line": 1045,
-							"col": 258,
-							"offset": 112130
-						},
-						"end": {
-							"line": 1045,
-							"col": 326,
-							"offset": 112198
 						}
 					}
 				},
@@ -8471,22 +8164,6 @@ const mockApp = {
 							"line": 477,
 							"col": 91,
 							"offset": 51606
-						}
-					}
-				},
-				{
-					"heading": "Как Выглядит PARA: Скриншоты Закулисья [page](Второй_мозг.pdf#page=100&selection=16,0,16,38&color=yellow)",
-					"level": 3,
-					"position": {
-						"start": {
-							"line": 486,
-							"col": 0,
-							"offset": 52329
-						},
-						"end": {
-							"line": 486,
-							"col": 109,
-							"offset": 52438
 						}
 					}
 				},
@@ -10040,21 +9717,6 @@ const mockApp = {
 					}
 				},
 				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 141,
-							"col": 0,
-							"offset": 11793
-						},
-						"end": {
-							"line": 141,
-							"col": 488,
-							"offset": 12281
-						}
-					}
-				},
-				{
 					"type": "heading",
 					"position": {
 						"start": {
@@ -10831,21 +10493,6 @@ const mockApp = {
 							"line": 253,
 							"col": 127,
 							"offset": 25132
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 255,
-							"col": 0,
-							"offset": 25134
-						},
-						"end": {
-							"line": 255,
-							"col": 173,
-							"offset": 25307
 						}
 					}
 				},
@@ -11656,21 +11303,6 @@ const mockApp = {
 							"line": 393,
 							"col": 137,
 							"offset": 42512
-						}
-					}
-				},
-				{
-					"type": "heading",
-					"position": {
-						"start": {
-							"line": 395,
-							"col": 0,
-							"offset": 42514
-						},
-						"end": {
-							"line": 395,
-							"col": 113,
-							"offset": 42627
 						}
 					}
 				},
@@ -13235,21 +12867,6 @@ const mockApp = {
 					}
 				},
 				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 625,
-							"col": 0,
-							"offset": 69287
-						},
-						"end": {
-							"line": 627,
-							"col": 552,
-							"offset": 70365
-						}
-					}
-				},
-				{
 					"type": "heading",
 					"position": {
 						"start": {
@@ -13261,21 +12878,6 @@ const mockApp = {
 							"line": 629,
 							"col": 77,
 							"offset": 70444
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 631,
-							"col": 0,
-							"offset": 70446
-						},
-						"end": {
-							"line": 631,
-							"col": 190,
-							"offset": 70636
 						}
 					}
 				},
@@ -15503,186 +15105,6 @@ const mockApp = {
 					"type": "blockquote",
 					"position": {
 						"start": {
-							"line": 973,
-							"col": 0,
-							"offset": 105223
-						},
-						"end": {
-							"line": 978,
-							"col": 98,
-							"offset": 105531
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 980,
-							"col": 0,
-							"offset": 105534
-						},
-						"end": {
-							"line": 980,
-							"col": 98,
-							"offset": 105632
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 982,
-							"col": 0,
-							"offset": 105635
-						},
-						"end": {
-							"line": 982,
-							"col": 108,
-							"offset": 105743
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 984,
-							"col": 0,
-							"offset": 105746
-						},
-						"end": {
-							"line": 984,
-							"col": 105,
-							"offset": 105851
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 986,
-							"col": 0,
-							"offset": 105854
-						},
-						"end": {
-							"line": 986,
-							"col": 121,
-							"offset": 105975
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 988,
-							"col": 0,
-							"offset": 105978
-						},
-						"end": {
-							"line": 988,
-							"col": 96,
-							"offset": 106074
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 990,
-							"col": 0,
-							"offset": 106077
-						},
-						"end": {
-							"line": 990,
-							"col": 140,
-							"offset": 106217
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 992,
-							"col": 0,
-							"offset": 106220
-						},
-						"end": {
-							"line": 992,
-							"col": 275,
-							"offset": 106495
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 994,
-							"col": 0,
-							"offset": 106498
-						},
-						"end": {
-							"line": 999,
-							"col": 218,
-							"offset": 107280
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 1001,
-							"col": 0,
-							"offset": 107283
-						},
-						"end": {
-							"line": 1002,
-							"col": 236,
-							"offset": 107636
-						}
-					}
-				},
-				{
-					"type": "heading",
-					"position": {
-						"start": {
-							"line": 1004,
-							"col": 0,
-							"offset": 107639
-						},
-						"end": {
-							"line": 1004,
-							"col": 139,
-							"offset": 107778
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
-							"line": 1006,
-							"col": 0,
-							"offset": 107781
-						},
-						"end": {
-							"line": 1006,
-							"col": 346,
-							"offset": 108127
-						}
-					}
-				},
-				{
-					"type": "blockquote",
-					"position": {
-						"start": {
 							"line": 1008,
 							"col": 0,
 							"offset": 108130
@@ -16781,7 +16203,7 @@ const mockApp = {
 					"Business & Economics"
 				],
 				"book_cover": "http://books.google.com/books/content?id=G5BOEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-				"book_description": "“One of my favorite books of the year. It completely reshaped how I think about information and how and why I take notes.” —Daniel Pink, bestselling author of Drive A revolutionary approach to enhancing productivity, creating flow, and vastly increasing your ability to capture, remember, and benefit from the unprecedented amount of information all around us. For the first time in history, we have instantaneous access to the world’s knowledge. There has never been a better time to learn, to contribute, and to improve ourselves. Yet, rather than feeling empowered, we are often left feeling overwhelmed by this constant influx of information. The very knowledge that was supposed to set us free has instead led to the paralyzing stress of believing we’ll never know or remember enough. Now, this eye-opening and accessible guide shows how you can easily create your own personal system for knowledge management, otherwise known as a Second Brain. As a trusted and organized digital repository of your most valued ideas, notes, and creative work synced across all your devices and platforms, a Second Brain gives you the confidence to tackle your most important projects and ambitious goals. Discover the full potential of your ideas and translate what you know into more powerful, more meaningful improvements in your work and life by Building a Second Brain.",
+				"book_description": "“One of my favorite books of the year. It completely reshaped how I think about information and how and why I take notes.” —Daniel Pink, bestselling author of Drive A revolutionary approach to enhancing productivity, creating flow, and vastly increasing your ability to capture, remember, and benefit from the unprecedented amount of information all around us. For the first time in history, we have instantaneous access to the world's knowledge. There has never been a better time to learn, to contribute, and to improve ourselves. Yet, rather than feeling empowered, we are often left feeling overwhelmed by this constant influx of information. The very knowledge that was supposed to set us free has instead led to the paralyzing stress of believing we'll never know or remember enough. Now, this eye-opening and accessible guide shows how you can easily create your own personal system for knowledge management, otherwise known as a Second Brain. As a trusted and organized digital repository of your most valued ideas, notes, and creative work synced across all your devices and platforms, a Second Brain gives you the confidence to tackle your most important projects and ambitious goals. Discover the full potential of your ideas and translate what you know into more powerful, more meaningful improvements in your work and life by Building a Second Brain.",
 				"book_isbn": [
 					"9781982167400",
 					"1982167408"

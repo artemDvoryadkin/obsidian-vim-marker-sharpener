@@ -1,17 +1,20 @@
 import { App, EditorSelection, Plugin, PluginManifest, } from 'obsidian';
 
+import { EditorHelper } from 'obsidian-sharpener-common/EditorHelper';
 import { SharpenerCommand } from './Commons/SharpenerCommand';
-import { EditorHelper } from './Helpers/EditorHelper';
+import { NextMarkerCommand, PreviousMarkerCommand, ClearMarkerCommand } from './commands/BoldCommand';
 
 import { HighlightCommand } from './commands/HighlightCommand';
-import { BoldCommand } from './commands/BoldCommand';
+import { BoldCommand, SelectMarkerCommand } from './commands/BoldCommand';
 import { CommentCommand } from './commands/CommentCommand';
 import { ItalicCommand } from './commands/ItalicCommand';
 import { StrikethroughCommand } from './commands/StrikethroughCommand';
 import { CodeCommand } from './commands/CodeCommand';
 
+
 // TODO: > Этот **плагин работает корректно c выделением текста_** в режиме **vim VISUAL, VISUAL LINE**.
 // если перейти vim и снять выделение то выделение снимится в первого болда, проблема в подчеркивании _**, если убрать то работает корректно
+// TODO: ==**Проблема — ошибка в инфраструктуре ИТ, способная стать или являющаяся причиной инцидентов.** Свойство отдельных элементов инфраструктуры или их взаимодействия, (потенциально) вредное для предоставляемых услуг==. нужно что  внутри были короткие бл]и, как ** они должны быть внутрениними 2025-04-21 12:00:00
 export default class VimMarkerPlugin extends Plugin {
 
 	commands: SharpenerCommand[] = [];
@@ -92,6 +95,10 @@ export default class VimMarkerPlugin extends Plugin {
 			new HighlightCommand(this),
 			new ItalicCommand(this),
 			new StrikethroughCommand(this),
+			new SelectMarkerCommand(this),
+			new NextMarkerCommand(this),
+			new PreviousMarkerCommand(this),
+			new ClearMarkerCommand(this),
 		];
 
 		try {

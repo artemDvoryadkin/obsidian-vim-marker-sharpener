@@ -1,8 +1,7 @@
 import { Command, App, EditorPosition } from 'obsidian';
 import { SharpenerCommand } from 'src/Commons/SharpenerCommand';
-import EditorHelper from 'src/Helpers/EditorHelper';
 import { MarkerAction, FormaterCommanger } from 'src/Helpers/FormaterHelper';
-
+import { EditorHelper } from '../Helpers/EditorHelper';
 
 export abstract class MarkerCommandBase extends SharpenerCommand {
 	command: Command;
@@ -13,7 +12,7 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 		const selectedVim = this.plugin.currentSelection;
 
 		const editorHelper = new EditorHelper(app);
-		editorHelper.editor
+		// Ensure editor is initialized
 
 		const formatterCommanger = new FormaterCommanger();
 

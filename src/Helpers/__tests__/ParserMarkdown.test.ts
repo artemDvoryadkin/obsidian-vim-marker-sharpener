@@ -13,6 +13,7 @@ describe('parseMarkdown', () => {
 		{ input: '**Hello** _World_' },
 		{ input: '**H ello**' },
 		{ input: ' Do not wrap lines.' }
+		, { input: ' Do *not* wrap lines.' }
 	]
 	testCases.forEach(testCase => {
 

@@ -13,7 +13,13 @@
 		"isolatedModules": true,
 		"strictNullChecks": true,
 		"skipLibCheck": true,
-		"lib": ["DOM", "ES5", "ES6", "ES7"]
+		"lib": ["DOM", "ES5", "ES6", "ES7"],
+		"paths": {
+			"obsidian-sharpener-common": ["../obsidian-sharpener-common/src"],
+			"obsidian-sharpener-common/*": [
+				"../obsidian-sharpener-common/src/*"
+			]
+		}
 	},
 	"include": ["src/**/*.ts"]
 }

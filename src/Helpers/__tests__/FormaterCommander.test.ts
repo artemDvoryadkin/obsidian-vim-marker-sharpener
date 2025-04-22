@@ -3,6 +3,69 @@ import { ParserMarkdown } from '../ParserMarkdown';
 import { expect } from '@jest/globals';
 import { Remarkable } from 'remarkable';
 
+describe('снятие выделения', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// выделение строки полной
+	// TODO: ошибка нужно пофиксить ели есть символы табуляции
+	it.each([
+		{ input: "as **bold** or **italicized**", position: 0, result: "as bold or italicized", description: "" },
+		{ input: "as **bold** or ==**italicized** test==", position: 0, result: "as bold or italicized test", descripion: "" },
+		{ input: "as **bold** or **italicized**", position: 5, result: "as bold or **italicized**", description: "" },
+		{ input: "as **bold** or **italicized**", position: 3, result: "as bold or **italicized**", description: "" }
+
+	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
+		const resultCall = formaterCommanger.makerClear(input, position);
+		expect(resultCall.lineText).toBe(result);
+	})
+})
+describe('снятие выделения множественных выделений', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// выделение строки полной
+	// TODO: ошибка нужно пофиксить ели есть символы табуляции
+	it.each([
+		{ input: "as **bold** or **italicized**", position: 0, positionTo: 5, result: "as bold or **italicized**", description: "" },
+		{ input: "as **bold** or ==**italicized** test==", position: 0, positionTo: 10, result: "as bold or ==**italicized** test==", descripion: "" },
+		{ input: "as **bold** or **italicized**", position: 5, positionTo: 10, result: "as bold or **italicized**", description: "" },
+		{ input: "as **bold** or **italicized**", position: 3, positionTo: 10, result: "as bold or **italicized**", description: "" }
+
+
+	])(`->$input позиция $position $positionTo =>> $result :: $description`, ({ input, position, positionTo, result, description }) => {
+		const resultCall = formaterCommanger.makerClear(input, position, positionTo);
+		expect(resultCall.lineText).toBe(result);
+	})
+})
+describe('Разное селкт маркер', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// выделение строки полной
+	// TODO: ошибка нужно пофиксить ели есть символы табуляции
+	it.each([
+		{ input: "test4 **dddd** www", position: 8, result: { from: 8, to: 11 }, description: "" },
+		{ input: "test4 **dddd** www", position: 7, result: { from: 8, to: 11 }, description: "" },
+		{ input: "test4 **dddd** www", position: 12, result: { from: 8, to: 11 }, description: "" },
+		{ input: "test4 dddd www  17", position: 5, result: { from: 0, to: 17 }, description: "" },
+
+
+	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
+		const resultCall = formaterCommanger.getMarkerPosition(input, position)
+		expect(resultCall.from).toEqual(result.from);
+		expect(resultCall.to).toEqual(result.to);
+	})
+})
 describe('Разное', () => {
 	let formaterCommanger: FormaterCommanger;
 
@@ -78,11 +141,11 @@ describe('Добавление выделения болд в слове по в
 	})
 
 	it.each([
-		{ input: "Текст5 жирный ", positionBeging: 1, positionEnd: 4, result: "Т_екст_5 жирный ", description: "выделение часли слова" },
-		{ input: "Текст5 жирный ", positionBeging: 0, positionEnd: 5, result: "_Текст5_ жирный ", description: "выделение часли слова" },
-		{ input: "Текст5 жирный ", positionBeging: 0, positionEnd: 9, result: "_Текст5 жир_ный ", description: "выделение часли слова" },
-		{ input: "Текст5    жирный ", positionBeging: 0, positionEnd: 7, result: "_Текст5_    жирный ", description: "выделение часли слова" },
-		{ input: "  Текст7    жирный ", positionBeging: 0, positionEnd: 9, result: "  _Текст7_    жирный ", description: "выделение часли слова" }
+		{ input: "Текст5 жирный ", positionBeging: 1, positionEnd: 4, result: "Т*екст*5 жирный ", description: "выделение часли слова" },
+		{ input: "Текст5 жирный ", positionBeging: 0, positionEnd: 5, result: "*Текст5* жирный ", description: "выделение часли слова" },
+		{ input: "Текст5 жирный ", positionBeging: 0, positionEnd: 9, result: "*Текст5 жир*ный ", description: "выделение часли слова" },
+		{ input: "Текст5    жирный ", positionBeging: 0, positionEnd: 7, result: "*Текст5*    жирный ", description: "выделение часли слова" },
+		{ input: "  Текст7    жирный ", positionBeging: 0, positionEnd: 9, result: "  *Текст7*    жирный ", description: "выделение часли слова" }
 	])(`Пример:$input позиция $positionBeging $positionEnd =>> $result :: $description`, ({ input, positionBeging, positionEnd, result, description }) => {
 		const resultCall = formaterCommanger.markerItalic(input, positionBeging, positionEnd)
 		expect(resultCall.lineText).toBe(result);

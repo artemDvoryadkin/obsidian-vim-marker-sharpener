@@ -64,7 +64,7 @@ export class ParserMarkdown {
 		return currentPosition
 	}
 
-	parseLine(line: string, fromSelectPosition?: number, toSelectPosition?: number): TextChain[] {
+	parseLine(line: string, fromSelectPosition = 0, toSelectPosition?: number): TextChain[] {
 		const result: TextChain[] = [];
 		const formaterCommanger = new FormaterCommanger()
 		const allMarkers = formaterCommanger.getAll()
@@ -111,7 +111,7 @@ export class ParserMarkdown {
 							result.push(closeTokenChain);
 
 							startSearchPosition = currentIndex + contentLength
-							currentIndex++;
+							currentIndex += contentLength;
 
 							//foundOpenMarker = false;
 							//openMarker.set(marker.markerAction, false)
@@ -133,14 +133,15 @@ export class ParserMarkdown {
 						result.push(textChain);
 
 						startSearchPosition = currentIndex + contentLength;
-						currentIndex++;
+						currentIndex += contentLength;
 
 						//foundOpenMarker = true;
 						openMarker.set(marker.markerAction, true)
 
 					}
-					else
-						currentIndex++;
+					else {
+						currentIndex += contentLength;
+					}
 				}
 				//}
 			})
@@ -148,6 +149,7 @@ export class ParserMarkdown {
 				const text = line.substring(startSearchPosition);
 				const textChain = new TextChain('text', startSearchPosition, currentIndex, text);
 				result.push(textChain)
+				currentIndex += text.length;
 			}
 			if (!isFind) currentIndex++;
 		}
@@ -178,7 +180,7 @@ export class ParserMarkdown {
 		const { openToken, closeToken } = formaterCommanger.getSourceTokens(markerAction)
 
 		let isOpenToken = false
-		for (let i = 0; i < tokens.length - 1; i++) {
+		for (let i = 0; i < tokens.length; i++) {
 			const currentChain = tokens[i]
 			if (currentChain.type == openToken.type) isOpenToken = true
 

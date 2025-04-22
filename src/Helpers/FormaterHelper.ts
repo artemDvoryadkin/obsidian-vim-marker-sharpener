@@ -13,7 +13,6 @@ interface Token {
 }
 
 
-
 export class LineTextResult {
 	fromSelectPosition: number
 	toSelectPosition?: number
@@ -30,8 +29,8 @@ export class TextChain {
 
 		if (type == 'bold_open') { this.isBold = true; this.content = '**' }
 		if (type == 'bold_close') { this.isBold = false; this.content = '**' }
-		if (type == 'italic_open') { this.isBold = false; this.content = '_' }
-		if (type == 'italic_close') { this.isBold = false; this.content = '_' }
+		if (type == 'italic_open') { this.isBold = false; this.content = '*' }
+		if (type == 'italic_close') { this.isBold = false; this.content = '*' }
 		if (type == 'highlight_open') { this.isBold = false; this.content = '==' }
 		if (type == 'highlight_close') { this.isBold = false; this.content = '==' }
 		if (type == 'strikethrough_open') { this.isBold = false; this.content = '~~' }
@@ -64,6 +63,10 @@ export class TextChain {
 		return this.type == 'bold_close' || this.type == 'italic_close' || this.type == 'highlight_close' || this.type == 'strikethrough_close' || this.type == 'code_close' || this.type == 'comment_close'
 
 	}
+	isTextMarker(): boolean {
+		return (this.isItalic || this.isHighlight || this.isStrikethrough || this.isCode || this.isComment || this.isBold) && this.type == 'text'
+	}
+
 	from: number
 	to: number
 	type: MarkerType
@@ -87,8 +90,8 @@ export class FormaterCommanger {
 		this.sourceTokens = []
 		this.sourceTokens.push({ type: 'bold_open', content: '**' })
 		this.sourceTokens.push({ type: 'bold_close', content: '**' })
-		this.sourceTokens.push({ type: 'italic_open', content: '_' })
-		this.sourceTokens.push({ type: 'italic_close', content: '_' })
+		this.sourceTokens.push({ type: 'italic_open', content: '*' })
+		this.sourceTokens.push({ type: 'italic_close', content: '*' })
 		this.sourceTokens.push({ type: 'highlight_open', content: '==' })
 		this.sourceTokens.push({ type: 'highlight_close', content: '==' })
 		this.sourceTokens.push({ type: 'strikethrough_open', content: '~~' })
@@ -136,6 +139,112 @@ export class FormaterCommanger {
 
 		return result
 	}
+
+	getMarkerPosition(textLine: string, fromCharPosition: number): { from: number, to: number } {
+		const parser = new ParserMarkdown();
+
+		const chainsText = parser.parseLine(textLine, fromCharPosition);
+		const formaterCommanger = new FormaterCommanger()
+		const fromChain = formaterCommanger.getChainByPosition(chainsText, fromCharPosition)
+		if (fromChain?.type == 'text') {
+			return { from: fromChain.from, to: fromChain.to }
+		} else if (fromChain?.isOpenMarker()) {
+			const closeChain = formaterCommanger.findMarkerCloseAfter(fromChain.markerAction, fromChain, chainsText)
+			if (closeChain) {
+				if (fromChain.to + 1 == closeChain.from) {
+					return { from: fromChain.from, to: closeChain.to }
+				}
+				else {
+					return { from: fromChain.to + 1, to: closeChain.from - 1 }
+				}
+			}
+
+		} else if (fromChain?.isCloseMarker()) {
+			const openChain = formaterCommanger.findMarkerOpenBefore(fromChain.markerAction, fromChain, chainsText)
+			if (openChain) {
+				if (fromChain.from - 1 == openChain.to) {
+					return { from: openChain.from, to: fromChain.to }
+				}
+				else {
+					return { from: openChain.to + 1, to: fromChain.from - 1 }
+				}
+			}
+		}
+		return { from: fromCharPosition, to: fromCharPosition }
+
+	}
+	makerClearOne(chain: TextChain, chains: TextChain[]) {
+
+		const parser = new ParserMarkdown();
+
+		let fromChain = chain
+		if (fromChain?.isOpenMarker()) {
+			const closeChain = this.findTextMarkerAfter(fromChain, chains)
+			if (closeChain) {
+				fromChain = closeChain
+			}
+		}
+		else if (fromChain?.isCloseMarker()) {
+			const openChain = this.findTextMarkerBefore(fromChain, chains)
+			if (openChain) {
+				fromChain = openChain
+			}
+		}
+
+		if (fromChain !== undefined && fromChain.type == 'text' && fromChain.isTextMarker()) {
+			this.getAll().forEach(markerAction => {
+				this.clearMarkerAction(chains, fromChain!, markerAction.markerAction)
+			})
+		}
+		/*
+		else if (fromChain !== undefined && fromChain.type == 'text' && !fromChain.isTextMarker()) {
+			chains.forEach(chain => {
+				if (chain.type == 'text' && chain.isTextMarker()) {
+					this.getAll().forEach(markerAction => {
+						this.clearMarkerAction(chains, chain, markerAction.markerAction)
+					})
+				}
+			})
+		}
+			*/
+	}
+	makerClear(textLine: string, fromCharPosition: number, toCharPosition?: number): LineTextResult {
+
+		const parser = new ParserMarkdown();
+		const chains = parser.parseLine(textLine, fromCharPosition, toCharPosition);
+
+		const fromChain = parser.getTextChain(chains, fromCharPosition)
+		const toChain = parser.getTextChain(chains, toCharPosition !== undefined ? toCharPosition : fromCharPosition)
+
+
+		if (fromChain !== undefined && toChain !== undefined && fromChain == toChain && fromChain.isTextMarker()) {
+			this.makerClearOne(fromChain, chains)
+		}
+		else if (fromChain !== undefined && toChain !== undefined && fromChain == toChain && !fromChain.isTextMarker() && fromChain.type == 'text') {
+			const fromIndex = 0
+			const toIndex = chains.length - 1
+			for (let i = fromIndex; i <= toIndex; i++) {
+				this.makerClearOne(chains[i], chains)
+			}
+		}
+		else if (fromChain !== undefined && toChain !== undefined && fromChain !== toChain) {
+			const fromIndex = chains.indexOf(fromChain)
+			const toIndex = chains.indexOf(toChain)
+			for (let i = fromIndex; i <= toIndex; i++) {
+				this.makerClearOne(chains[i], chains)
+			}
+		}
+		if (fromChain !== undefined && toChain !== undefined && fromChain == toChain && (fromChain.isOpenMarker() || fromChain.isCloseMarker())) {
+			this.makerClearOne(fromChain, chains)
+		}
+		const lineText = this.optimizeChain(chains)
+		return {
+			lineText: lineText,
+			fromSelectPosition: 0,
+			toSelectPosition: 0
+		}
+	}
+
 
 	private sliceTextChain(textChain: TextChain, position: number, textChaininsert: TextChain): TextChain[] {
 
@@ -491,7 +600,7 @@ export class FormaterCommanger {
 			}
 		}
 
-		function markBold(chainsText: TextChain[], fromIndex: number, toIndex: number) {
+		function markMarkerAction(chainsText: TextChain[], fromIndex: number, toIndex: number) {
 
 			for (let i = fromIndex; i <= toIndex; i++) {
 				const isFlag = self.getIsFlagByMarkerAction(markerAction, chainsText[i])
@@ -508,13 +617,13 @@ export class FormaterCommanger {
 		if (currentChain.type == 'text') {
 			clearLeft(chainsText, fromIndex)
 			clearRight(chainsText, fromIndex)
-			markBold(chainsText, leftIndex, rightIndex)
+			markMarkerAction(chainsText, leftIndex, rightIndex)
 		} else if (currentChain.type == openTag) {
 			clearRight(chainsText, fromIndex)
-			markBold(chainsText, leftIndex, rightIndex)
+			markMarkerAction(chainsText, leftIndex, rightIndex)
 		} else if (currentChain.type == closeTag) {
 			clearLeft(chainsText, fromIndex)
-			markBold(chainsText, leftIndex, rightIndex)
+			markMarkerAction(chainsText, leftIndex, rightIndex)
 		}
 	}
 
@@ -641,6 +750,32 @@ export class FormaterCommanger {
 		return chainsText[startIndex + 1];
 	}
 
+	getNextChainByTypeAndPositionAndMarkered(position: number, type: MarkerType, chainsText: TextChain[]): TextChain | undefined {
+		const startIndex = chainsText.find(chain => (position < chain.from) && chain.type == type && chain.isTextMarker())
+
+		return startIndex ?? undefined
+	}
+
+	getPreviousChainByTypeAndPositionAndMarkered(position: number, type: MarkerType, chainsText: TextChain[]): TextChain | undefined {
+		let result: TextChain | undefined = undefined;
+
+		for (const chain of chainsText) {
+			if ((position > chain.to) && chain.type === type && chain.isTextMarker()) {
+				result = chain;
+			}
+		}
+
+		return result;
+	}
+
+	getChainByPosition(chainsText: TextChain[], position: number): TextChain | undefined {
+		const startIndex = chainsText.findIndex(chain => chain.from <= position && position <= chain.to);
+		if (startIndex === -1) return undefined;
+
+		return chainsText[startIndex];
+	}
+
+
 	getPrevChain(textChain: TextChain, chainsText: TextChain[]): TextChain | undefined {
 		const startIndex = chainsText.indexOf(textChain);
 		if (startIndex === 1 || startIndex == 0) return undefined;
@@ -660,6 +795,30 @@ export class FormaterCommanger {
 			}
 		}
 		return null;
+	}
+	findTextMarkerBefore(textChain: TextChain, chainsText: TextChain[]): TextChain | undefined {
+
+		const startIndex = chainsText.indexOf(textChain);
+		if (startIndex === -1) return undefined;
+
+		for (let i = startIndex; i >= 0; i--) {
+			if (chainsText[i].type === 'text') {
+				return chainsText[i];
+			}
+		}
+		return undefined;
+	}
+	findTextMarkerAfter(textChain: TextChain, chainsText: TextChain[]): TextChain | undefined {
+
+		const startIndex = chainsText.indexOf(textChain);
+		if (startIndex === -1) return undefined;
+
+		for (let i = startIndex; i < chainsText.length; i++) {
+			if (chainsText[i].type === 'text') {
+				return chainsText[i];
+			}
+		}
+		return undefined;
 	}
 }
 
