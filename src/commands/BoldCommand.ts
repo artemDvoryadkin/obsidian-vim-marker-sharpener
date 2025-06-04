@@ -25,24 +25,6 @@ export class ClearMarkerCommand extends MarkerCommandBase {
 	}
 }
 
-export class SelectMarkerCommand extends MarkerCommandBase {
-	id = 'select-marker';
-	name = 'Select Marker';
-	prefix = '';
-	command: Command;
-
-	async execute(app: App): Promise<void> {
-		const editorHelper = new EditorHelper(app);
-		const cursor = editorHelper.getCursor();
-		const lineText = editorHelper.getLineByCursor();
-
-		const formaterCommanger = new FormaterCommanger();
-		const resultCall = formaterCommanger.getMarkerPosition(lineText, cursor.ch)
-		editorHelper.editor!.setSelection({ line: cursor.line, ch: resultCall.from }, { line: cursor.line, ch: resultCall.to + 1 });
-
-	}
-}
-
 export class PreviousMarkerCommand extends MarkerCommandBase {
 	id = 'previous-marker';
 	name = 'Previous Marker';

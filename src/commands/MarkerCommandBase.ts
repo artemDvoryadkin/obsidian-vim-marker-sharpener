@@ -19,6 +19,7 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 		const isSelected = selectedVim && selectedVim[0].anchor.ch != selectedVim[0].head.ch;
 
 		const head = isSelected && selectedVim[0].head;
+		console.log("bold-selected", isSelected && selectedVim[0])
 
 		if (isSelected) {
 			let from = selectedVim[0].head as EditorPosition;

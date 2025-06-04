@@ -5,7 +5,8 @@ import { SharpenerCommand } from './Commons/SharpenerCommand';
 import { NextMarkerCommand, PreviousMarkerCommand, ClearMarkerCommand } from './commands/BoldCommand';
 
 import { HighlightCommand } from './commands/HighlightCommand';
-import { BoldCommand, SelectMarkerCommand } from './commands/BoldCommand';
+import { BoldCommand } from './commands/BoldCommand';
+import { SelectMarkerCommand } from './commands/SelectMarkerCommand';
 import { CommentCommand } from './commands/CommentCommand';
 import { ItalicCommand } from './commands/ItalicCommand';
 import { StrikethroughCommand } from './commands/StrikethroughCommand';

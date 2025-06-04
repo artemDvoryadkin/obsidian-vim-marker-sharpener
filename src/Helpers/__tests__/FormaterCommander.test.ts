@@ -3,6 +3,27 @@ import { ParserMarkdown } from '../ParserMarkdown';
 import { expect } from '@jest/globals';
 import { Remarkable } from 'remarkable';
 
+describe('smart selector', () => {
+	let formaterCommanger: FormaterCommanger;
+
+	beforeEach(() => {
+		formaterCommanger = new FormaterCommanger();
+	});
+
+	// выделение строки полной
+	// TODO: ошибка нужно пофиксить ели есть символы табуляции
+	it.each([  
+		{ input: "- test6: test.", position:1, selectStart: 2,selectEnd: 6 },
+		{ input: "1. est6: test.", position:1, selectStart: 2,selectEnd: 6 },
+		{ input: "test6 eee10: test.", position:1, selectStart: 0,selectEnd: 10 },
+		{ input: "● kltest  eee14: test.\n test", position:10, selectStart: 2,selectEnd: 14 },
+
+	])(`->$input позиция {$selectStart,$selectEnd}`, ({ input, position,selectStart, selectEnd}) => {
+		const resultCall = formaterCommanger.getSmartSelection(input, position);
+		expect(resultCall.from).toBe(selectStart);
+		expect(resultCall.to).toBe(selectEnd);
+	})
+})
 describe('снятие выделения', () => {
 	let formaterCommanger: FormaterCommanger;
 

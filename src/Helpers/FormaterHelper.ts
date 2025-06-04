@@ -1,6 +1,7 @@
 import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
+import { text } from 'stream/consumers';
 
 export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close' | 'comment_open' | 'comment_close';
 export type MarkerAction = 'bold' | 'italic' | 'highlight' | 'strikethrough' | 'code' | 'comment'
@@ -129,10 +130,20 @@ export class FormaterCommanger {
 		if (from.line > to.line || (from.line === to.line && from.ch > to.ch)) {
 			[from, to] = [to, from]
 		}
+		console.log("selection", selection)
 
 		lines.forEach((textLine, i) => {
+			console.log("textLine", textLine)
 			const fromCharPosition = (i === 0) ? from.ch : 0; // Определение fromCharPosition
 			const toCharPosition = (i === lines.length - 1) ? to.ch : textLine.length - 1; // Определение toCharPosition
+
+			console.log("char s", fromCharPosition, toCharPosition)
+
+			// проблема п=ного выделения строки позхиция head идет на следующую строку и ch:-1, делаеем затыску , да при ээтом подает markerAction
+			if (fromCharPosition === 0 && toCharPosition === -1) {
+				return
+			}
+
 			const newLine = this.markerMarkerAction(markerAction, textLine, fromCharPosition, toCharPosition); // Вызов функции
 			result.push(newLine)
 		})
@@ -140,14 +151,71 @@ export class FormaterCommanger {
 		return result
 	}
 
-	getMarkerPosition(textLine: string, fromCharPosition: number): { from: number, to: number } {
+	findDotPosition(line: string): number {
+		const dotIndex = line.indexOf('.');
+		const fQuestion = line.indexOf('?');
+		const firstDot = Math.min(
+			dotIndex === -1 ? Number.MAX_VALUE : dotIndex,
+			fQuestion === -1 ? Number.MAX_VALUE : fQuestion
+		);
+
+		// Проверка на нумерованный список: строка начинается с числа и точки (например, "1. ", "10. ")
+		const numberedListMatch = line.match(/^(\d+)\.\s?/);
+
+		if (numberedListMatch) {
+			// Найдём вторую точку после первой
+			const secondDot = line.indexOf('.', firstDot + 1);
+			return secondDot !== -1 ? secondDot : -1;
+		} else {
+			// Вернуть первую точку, если она есть
+			return firstDot !== -1 ? firstDot : -1;
+		}
+	}
+	getSmartSelection(textLine: string, cursorPosition: number): { from: number, to: number } {
+		const firstFindChar = textLine.search(/^(▶●|♦|-|\d+\.\s+)/)
+		const firstSpace = textLine.indexOf(" ")
+		const firstDot = this.findDotPosition(textLine)
+		const colonos = textLine.indexOf(":")
+		const textLineLength = textLine.length
+		console.log("getMarkerPosition", firstFindChar)
+		// tckb
+		if (firstFindChar == 0) {
+
+			console.log("firsFindDot", { firstDot, colonos, cursorPosition })
+			if (
+				firstDot == -1 && colonos > -1 && cursorPosition <= colonos
+				|| firstDot > -1 && colonos < firstDot && cursorPosition <= colonos) {
+				console.log("test")
+				return { from: firstSpace + 1, to: colonos - 1 }
+			}
+			else if (firstDot === -1 || colonos === -1) {
+				return { from: firstSpace + 1, to: textLineLength }
+			}
+		}
+		else {
+			// заголовк :
+
+			const block = textLine.search(/^([\w\d ]+):/)
+			if (block === 0) {
+				const position = textLine.indexOf(":")
+				if (cursorPosition <= position) return { from: 0, to: position - 1 }
+			}
+		}
+
+		return { from: cursorPosition, to: cursorPosition }
+	}
+
+	getMarkerPosition(textLine: string, cursorPosition: number): { from: number, to: number } {
 		const parser = new ParserMarkdown();
 
-		const chainsText = parser.parseLine(textLine, fromCharPosition);
+		const chainsText = parser.parseLine(textLine, cursorPosition);
 		const formaterCommanger = new FormaterCommanger()
-		const fromChain = formaterCommanger.getChainByPosition(chainsText, fromCharPosition)
+		const fromChain = formaterCommanger.getChainByPosition(chainsText, cursorPosition)
 		if (fromChain?.type == 'text') {
-			return { from: fromChain.from, to: fromChain.to }
+			// умное выделение
+			// если это елемент списка начало 1. что-то :
+
+			return this.getSmartSelection(textLine, cursorPosition)
 		} else if (fromChain?.isOpenMarker()) {
 			const closeChain = formaterCommanger.findMarkerCloseAfter(fromChain.markerAction, fromChain, chainsText)
 			if (closeChain) {
@@ -170,7 +238,7 @@ export class FormaterCommanger {
 				}
 			}
 		}
-		return { from: fromCharPosition, to: fromCharPosition }
+		return { from: cursorPosition, to: cursorPosition }
 
 	}
 	makerClearOne(chain: TextChain, chains: TextChain[]) {
@@ -208,13 +276,13 @@ export class FormaterCommanger {
 		}
 			*/
 	}
-	makerClear(textLine: string, fromCharPosition: number, toCharPosition?: number): LineTextResult {
+	makerClear(textLine: string, cursorPosition: number, toCharPosition?: number): LineTextResult {
 
 		const parser = new ParserMarkdown();
-		const chains = parser.parseLine(textLine, fromCharPosition, toCharPosition);
+		const chains = parser.parseLine(textLine, cursorPosition, toCharPosition);
 
-		const fromChain = parser.getTextChain(chains, fromCharPosition)
-		const toChain = parser.getTextChain(chains, toCharPosition !== undefined ? toCharPosition : fromCharPosition)
+		const fromChain = parser.getTextChain(chains, cursorPosition)
+		const toChain = parser.getTextChain(chains, toCharPosition !== undefined ? toCharPosition : cursorPosition)
 
 
 		if (fromChain !== undefined && toChain !== undefined && fromChain == toChain && fromChain.isTextMarker()) {
@@ -376,6 +444,7 @@ export class FormaterCommanger {
 			if (fromCharPosition !== undefined && toCharPosition !== undefined) {
 
 				const toChainPosition = parser.getTextChain(chainsText, toCharPosition)
+				console.log("dde", toChainPosition, chainsText, toCharPosition)
 				if (toChainPosition === undefined) throw new Error("ddeieie")
 
 				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition);

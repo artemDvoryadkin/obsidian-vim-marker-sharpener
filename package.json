@@ -11,9 +11,9 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
 		"deployToObsidian": "npm run build && npm run 'copyBuildLocal' && npm run 'moveToObsidian'",
 		"deploy": "npm run build && npm run 'copy plugin to obsidian'",
-		"moveToObsidian": "mv distToObsidian/.??* distToObsidian/*.*  /Users/artemdvoryadkin/Documents/Projects/HH.Obsidian/.obsidian/plugins/vim-marker-sharpener",
+		"moveToObsidian": "mv distToObsidian/.??* distToObsidian/*.*  ~/obsidian_vaults/secondMind/.obsidian/plugins/vim-marker-sharpener",
 		"copyBuildLocal": "cp dist/main.js manifest.json styles.css .hotreload  distToObsidian",
-		"deleteMain": "rm /Users/artemdvoryadkin/Documents/Projects/HH.Obsidian/.obsidian/plugins/vim-marker-sharpener/main.js",
+		"deleteMain": "rm ~/obsidian_vaults/secondMind/.obsidian/plugins/vim-marker-sharpener/main.js",
 		"start": "node src/main.js",
 		"build & delpoy Obsidian": "npm run build && npm run 'deleteMain' && npm run 'copy plugin to obsidian'",
 		"prepare": "husky"
