@@ -106,7 +106,7 @@ export default class VimMarkerPlugin extends Plugin {
 			for (const command of this.commands) {
 				command.command = this.addCommand({
 					id: command.id,
-					name: `${command.prefix} ${command.name}`,
+					name: command.name,
 					callback: () => command.execute(this.app),
 					checkCallback: (checking: boolean) => command.check(this.app, checking),
 				});
