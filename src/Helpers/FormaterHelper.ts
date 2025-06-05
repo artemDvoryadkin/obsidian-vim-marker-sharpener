@@ -172,7 +172,7 @@ export class FormaterCommanger {
 		}
 	}
 	getSmartSelection(textLine: string, cursorPosition: number): { from: number, to: number } {
-		const firstFindChar = textLine.search(/^(▶●|♦|-|\d+\.\s+)/)
+		const firstFindChar = textLine.search(/^(\*\s+|▶|●|♦|-|\d+\.\s+)/)
 		const firstSpace = textLine.indexOf(" ")
 		const firstDot = this.findDotPosition(textLine)
 		const colonos = textLine.indexOf(":")
@@ -211,12 +211,17 @@ export class FormaterCommanger {
 		const chainsText = parser.parseLine(textLine, cursorPosition);
 		const formaterCommanger = new FormaterCommanger()
 		const fromChain = formaterCommanger.getChainByPosition(chainsText, cursorPosition)
+
 		if (fromChain?.type == 'text') {
 			// умное выделение
 			// если это елемент списка начало 1. что-то :
 
-			return this.getSmartSelection(textLine, cursorPosition)
-		} else if (fromChain?.isOpenMarker()) {
+			const smartSelection = this.getSmartSelection(textLine, cursorPosition)
+			if (smartSelection.from != smartSelection.to) {
+				return smartSelection
+			}
+		}
+		if (fromChain?.isOpenMarker()) {
 			const closeChain = formaterCommanger.findMarkerCloseAfter(fromChain.markerAction, fromChain, chainsText)
 			if (closeChain) {
 				if (fromChain.to + 1 == closeChain.from) {
@@ -226,7 +231,6 @@ export class FormaterCommanger {
 					return { from: fromChain.to + 1, to: closeChain.from - 1 }
 				}
 			}
-
 		} else if (fromChain?.isCloseMarker()) {
 			const openChain = formaterCommanger.findMarkerOpenBefore(fromChain.markerAction, fromChain, chainsText)
 			if (openChain) {
@@ -237,6 +241,8 @@ export class FormaterCommanger {
 					return { from: openChain.to + 1, to: fromChain.from - 1 }
 				}
 			}
+		} else if (fromChain?.type == 'text' && fromChain.isTextMarker()) {
+			return { from: fromChain.from, to: fromChain.to }
 		}
 		return { from: cursorPosition, to: cursorPosition }
 

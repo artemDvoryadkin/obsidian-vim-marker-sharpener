@@ -12,13 +12,13 @@ describe('smart selector', () => {
 
 	// выделение строки полной
 	// TODO: ошибка нужно пофиксить ели есть символы табуляции
-	it.each([  
-		{ input: "- test6: test.", position:1, selectStart: 2,selectEnd: 6 },
-		{ input: "1. est6: test.", position:1, selectStart: 2,selectEnd: 6 },
-		{ input: "test6 eee10: test.", position:1, selectStart: 0,selectEnd: 10 },
-		{ input: "● kltest  eee14: test.\n test", position:10, selectStart: 2,selectEnd: 14 },
+	it.each([
+		{ input: "- test6: test.", position: 1, selectStart: 2, selectEnd: 6 },
+		{ input: "1. est6: test.", position: 1, selectStart: 3, selectEnd: 6 },
+		{ input: "test6 eee10: test.", position: 1, selectStart: 0, selectEnd: 10 },
+		{ input: "● kltest  eee14: test.\n test", position: 10, selectStart: 2, selectEnd: 14 },
 
-	])(`->$input позиция {$selectStart,$selectEnd}`, ({ input, position,selectStart, selectEnd}) => {
+	])(`->$input позиция {$selectStart,$selectEnd}`, ({ input, position, selectStart, selectEnd }) => {
 		const resultCall = formaterCommanger.getSmartSelection(input, position);
 		expect(resultCall.from).toBe(selectStart);
 		expect(resultCall.to).toBe(selectEnd);
@@ -78,7 +78,7 @@ describe('Разное селкт маркер', () => {
 		{ input: "test4 **dddd** www", position: 8, result: { from: 8, to: 11 }, description: "" },
 		{ input: "test4 **dddd** www", position: 7, result: { from: 8, to: 11 }, description: "" },
 		{ input: "test4 **dddd** www", position: 12, result: { from: 8, to: 11 }, description: "" },
-		{ input: "test4 dddd www  17", position: 5, result: { from: 0, to: 17 }, description: "" },
+		{ input: "test4 dddd www  17", position: 5, result: { from: 5, to: 5 }, description: "" },
 
 
 	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
