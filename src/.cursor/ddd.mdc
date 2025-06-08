@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.ts
+alwaysApply: true
+---
+- при разработке используется режим dev, то console.log

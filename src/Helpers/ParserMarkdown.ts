@@ -160,6 +160,18 @@ export class ParserMarkdown {
 		this.markeredTokens(result, 'strikethrough')
 		this.markeredTokens(result, 'code')
 
+		let currentPosition = 0
+		for (let i = 0; i < result.length; i++) {
+			const currentChain = result[i]
+			currentChain.from = currentPosition
+			if (currentChain.content!.length > 1) {
+				currentPosition += currentChain.content!.length - 1
+			}
+			currentChain.to = currentPosition
+			currentPosition++
+		}
+
+
 		for (let i = 0; i < result.length; i++) {
 			const currentChain = result[i]
 			if (fromSelectPosition !== undefined

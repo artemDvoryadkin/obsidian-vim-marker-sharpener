@@ -2,6 +2,9 @@ import { Command, App, EditorPosition } from 'obsidian';
 import { SharpenerCommand } from 'src/Commons/SharpenerCommand';
 import { MarkerAction, FormaterCommanger } from 'src/Helpers/FormaterHelper';
 import { EditorHelper } from '../Helpers/EditorHelper';
+import '../Commons/dev-global';
+
+declare const __DEV__: boolean;
 
 export abstract class MarkerCommandBase extends SharpenerCommand {
 	command: Command;
@@ -19,7 +22,7 @@ export abstract class MarkerCommandBase extends SharpenerCommand {
 		const isSelected = selectedVim && selectedVim[0].anchor.ch != selectedVim[0].head.ch;
 
 		const head = isSelected && selectedVim[0].head;
-		console.log("bold-selected", isSelected && selectedVim[0])
+		__DEV__ && console.log("bold-selected", isSelected && selectedVim[0])
 
 		if (isSelected) {
 			let from = selectedVim[0].head as EditorPosition;

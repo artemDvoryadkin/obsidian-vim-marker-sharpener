@@ -3,7 +3,7 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class HighlightCommand extends MarkerCommandBase {
 	id = 'toggle-highlight';
-	name = 'Toggle Highlight';
+	name = 'Toggle highlight';
 	prefix = '';
 	command: Command;
 

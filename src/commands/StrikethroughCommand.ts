@@ -3,7 +3,7 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class StrikethroughCommand extends MarkerCommandBase {
 	id = 'toggle-strikethrough';
-	name = 'Toggle Strikethrough';
+	name = 'Toggle strikethrough';
 	prefix = '';
 	command: Command;
 

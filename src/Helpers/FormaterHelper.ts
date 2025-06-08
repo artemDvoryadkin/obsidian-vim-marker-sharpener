@@ -1,3 +1,4 @@
+import '../Commons/dev-global';
 import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
@@ -64,11 +65,11 @@ export class TextChain {
 		return this.type == 'bold_close' || this.type == 'italic_close' || this.type == 'highlight_close' || this.type == 'strikethrough_close' || this.type == 'code_close' || this.type == 'comment_close'
 
 	}
+	from: number;
+
 	isTextMarker(): boolean {
 		return (this.isItalic || this.isHighlight || this.isStrikethrough || this.isCode || this.isComment || this.isBold) && this.type == 'text'
 	}
-
-	from: number
 	to: number
 	type: MarkerType
 	content: string
@@ -130,14 +131,14 @@ export class FormaterCommanger {
 		if (from.line > to.line || (from.line === to.line && from.ch > to.ch)) {
 			[from, to] = [to, from]
 		}
-		console.log("selection", selection)
+		__DEV__ && console.log("selection", selection)
 
 		lines.forEach((textLine, i) => {
-			console.log("textLine", textLine)
+			__DEV__ && console.log("textLine", textLine)
 			const fromCharPosition = (i === 0) ? from.ch : 0; // Определение fromCharPosition
 			const toCharPosition = (i === lines.length - 1) ? to.ch : textLine.length - 1; // Определение toCharPosition
 
-			console.log("char s", fromCharPosition, toCharPosition)
+			__DEV__ && console.log("char s", fromCharPosition, toCharPosition)
 
 			// проблема п=ного выделения строки позхиция head идет на следующую строку и ch:-1, делаеем затыску , да при ээтом подает markerAction
 			if (fromCharPosition === 0 && toCharPosition === -1) {
@@ -177,15 +178,15 @@ export class FormaterCommanger {
 		const firstDot = this.findDotPosition(textLine)
 		const colonos = textLine.indexOf(":")
 		const textLineLength = textLine.length
-		console.log("getMarkerPosition", firstFindChar)
+		__DEV__ && console.log("getMarkerPosition", firstFindChar)
 		// tckb
 		if (firstFindChar == 0) {
 
-			console.log("firsFindDot", { firstDot, colonos, cursorPosition })
+			__DEV__ && console.log("firsFindDot", { firstDot, colonos, cursorPosition })
 			if (
 				firstDot == -1 && colonos > -1 && cursorPosition <= colonos
 				|| firstDot > -1 && colonos < firstDot && cursorPosition <= colonos) {
-				console.log("test")
+				__DEV__ && console.log("test")
 				return { from: firstSpace + 1, to: colonos - 1 }
 			}
 			else if (firstDot === -1 || colonos === -1) {
@@ -212,7 +213,7 @@ export class FormaterCommanger {
 		const formaterCommanger = new FormaterCommanger()
 		const fromChain = formaterCommanger.getChainByPosition(chainsText, cursorPosition)
 
-		if (fromChain?.type == 'text') {
+		if (fromChain?.type == 'text' && !fromChain.isTextMarker()) {
 			// умное выделение
 			// если это елемент списка начало 1. что-то :
 
@@ -450,7 +451,7 @@ export class FormaterCommanger {
 			if (fromCharPosition !== undefined && toCharPosition !== undefined) {
 
 				const toChainPosition = parser.getTextChain(chainsText, toCharPosition)
-				console.log("dde", toChainPosition, chainsText, toCharPosition)
+				__DEV__ && console.log("dde", toChainPosition, chainsText, toCharPosition)
 				if (toChainPosition === undefined) throw new Error("ddeieie")
 
 				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition);

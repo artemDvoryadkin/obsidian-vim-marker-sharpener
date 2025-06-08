@@ -2,11 +2,13 @@ import { Command, App } from 'obsidian';
 import { EditorHelper } from 'src/Helpers/EditorHelper';
 import { FormaterCommanger } from 'src/Helpers/FormaterHelper';
 import { MarkerCommandBase } from './MarkerCommandBase';
+import '../Commons/dev-global';
 
+declare const __DEV__: boolean;
 
 export class SelectMarkerCommand extends MarkerCommandBase {
 	id = 'select-marker';
-	name = 'Select Marker';
+	name = 'Select marker';
 	prefix = '';
 	command: Command;
 
@@ -17,14 +19,14 @@ export class SelectMarkerCommand extends MarkerCommandBase {
 
 		const formaterCommanger = new FormaterCommanger();
 		const resultCall = formaterCommanger.getMarkerPosition(lineText, cursor.ch);
-		console.log("resultCall", resultCall)
-		const anchor={ line: cursor.line, ch: resultCall.from }
+		__DEV__ && console.log("resultCall", resultCall);
+		const anchor = { line: cursor.line, ch: resultCall.from }
 
-		const head = { line: cursor.line, ch: resultCall.to  }
+		const head = { line: cursor.line, ch: resultCall.to }
 
 		if (lineText.length > head.ch) head.ch += 1
 
-		console.log("resultCall", {anchor, head})
+		__DEV__ && console.log("resultCall", { anchor, head });
 		editorHelper.editor!.setSelection(anchor, head);
 	}
 }

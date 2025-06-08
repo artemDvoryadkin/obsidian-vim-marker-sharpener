@@ -12,10 +12,17 @@ import { ItalicCommand } from './commands/ItalicCommand';
 import { StrikethroughCommand } from './commands/StrikethroughCommand';
 import { CodeCommand } from './commands/CodeCommand';
 
+import './Commons/dev-global';
+
+// Add this interface above the class or inside the file
+interface CodeMirrorWithHandlers extends CodeMirror.Editor {
+	_handlers: { [event: string]: Array<{ name: string }> };
+}
 
 // TODO: > Этот **плагин работает корректно c выделением текста_** в режиме **vim VISUAL, VISUAL LINE**.
 // если перейти vim и снять выделение то выделение снимится в первого болда, проблема в подчеркивании _**, если убрать то работает корректно
 // TODO: ==**Проблема — ошибка в инфраструктуре ИТ, способная стать или являющаяся причиной инцидентов.** Свойство отдельных элементов инфраструктуры или их взаимодействия, (потенциально) вредное для предоставляемых услуг==. нужно что  внутри были короткие бл]и, как ** они должны быть внутрениними 2025-04-21 12:00:00
+
 export default class VimMarkerPlugin extends Plugin {
 
 	commands: SharpenerCommand[] = [];
@@ -31,6 +38,8 @@ export default class VimMarkerPlugin extends Plugin {
 	async onload() {
 		console.log('loading %s plugin v%s ...', this.manifest.name, this.manifest.version);
 
+		__DEV__ && console.log('[DEV] Плагин загружается в режиме разработки');
+
 		//await this.loadSettings();
 		this.initializePlugin();
 		this.registerEventHandlers();
@@ -38,13 +47,13 @@ export default class VimMarkerPlugin extends Plugin {
 		console.log(`loaded ${this.pluginName}`);
 	}
 	private registerEvents(): void {
-		this.app.workspace.on("active-leaf-change", async () => {
+		this.registerEvent(this.app.workspace.on("active-leaf-change", async () => {
 			this.updateSelectionEvent();
-		});
+		}));
 		// and this don't trigger on opening same file in new pane
-		this.app.workspace.on("file-open", async () => {
+		this.registerEvent(this.app.workspace.on("file-open", async () => {
 			this.updateSelectionEvent();
-		});
+		}));
 	}
 	async updateSelectionEvent() {
 
@@ -71,7 +80,7 @@ export default class VimMarkerPlugin extends Plugin {
 	}
 
 	private getCursorActivityHandlers(cm: CodeMirror.Editor) {
-		return (cm as any)._handlers.cursorActivity;
+		return (cm as CodeMirrorWithHandlers)._handlers.cursorActivity;
 	}
 
 	private initializePlugin(): void {
@@ -79,15 +88,15 @@ export default class VimMarkerPlugin extends Plugin {
 
 
 	private registerEventHandlers(): void {
-
-		this.app.workspace.on("active-leaf-change", async () => {
+		this.registerEvent(this.app.workspace.on("active-leaf-change", async () => {
 			this.updateSelectionEvent();
-		});
-		this.app.workspace.on("file-open", async () => {
+		}));
+		this.registerEvent(this.app.workspace.on("file-open", async () => {
 			this.updateSelectionEvent();
-		});
+		}));
 
 	}
+
 	private registerCommands(): void {
 		this.commands = [
 			new BoldCommand(this),

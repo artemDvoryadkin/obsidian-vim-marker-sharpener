@@ -6,7 +6,7 @@ import { ParserMarkdown } from 'src/Helpers/ParserMarkdown';
 
 export class ClearMarkerCommand extends MarkerCommandBase {
 	id = 'clear-marker';
-	name = 'Clear Marker';
+	name = 'Clear marker';
 	prefix = '';
 
 	command: Command;
@@ -27,7 +27,7 @@ export class ClearMarkerCommand extends MarkerCommandBase {
 
 export class PreviousMarkerCommand extends MarkerCommandBase {
 	id = 'previous-marker';
-	name = 'Previous Marker';
+	name = 'Previous marker';
 	prefix = '';
 	command: Command;
 
@@ -43,7 +43,7 @@ export class PreviousMarkerCommand extends MarkerCommandBase {
 }
 export class NextMarkerCommand extends MarkerCommandBase {
 	id = 'next-marker';
-	name = 'Next Marker';
+	name = 'Next marker';
 	prefix = '';
 	command: Command;
 
@@ -59,7 +59,7 @@ export class NextMarkerCommand extends MarkerCommandBase {
 }
 export class BoldCommand extends MarkerCommandBase {
 	id = 'toggle-bold';
-	name = 'Toggle Bold';
+	name = 'Toggle bold';
 	prefix = '';
 	command: Command;
 

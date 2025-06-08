@@ -3,7 +3,7 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class CodeCommand extends MarkerCommandBase {
 	id = 'toggle-code';
-	name = 'Toggle Code';
+	name = 'Toggle code';
 	prefix = '';
 	command: Command;
 
