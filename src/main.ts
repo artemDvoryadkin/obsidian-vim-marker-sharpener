@@ -1,6 +1,6 @@
 import { App, EditorSelection, Plugin, PluginManifest, } from 'obsidian';
 
-import { EditorHelper } from 'obsidian-sharpener-common/EditorHelper';
+import { EditorHelper } from './Helpers/EditorHelper';
 import { SharpenerCommand } from './Commons/SharpenerCommand';
 import { NextMarkerCommand, PreviousMarkerCommand, ClearMarkerCommand } from './commands/BoldCommand';
 
