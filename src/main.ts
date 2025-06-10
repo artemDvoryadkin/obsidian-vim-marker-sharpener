@@ -2,7 +2,9 @@ import { App, EditorSelection, Plugin, PluginManifest, } from 'obsidian';
 
 import { EditorHelper } from './Helpers/EditorHelper';
 import { SharpenerCommand } from './Commons/SharpenerCommand';
-import { NextMarkerCommand, PreviousMarkerCommand, ClearMarkerCommand } from './commands/BoldCommand';
+import { NextMarkerCommand } from './commands/NextMarkerCommand';
+import { PreviousMarkerCommand } from './commands/PreviousMarkerCommand';
+import { ClearMarkerCommand } from './commands/ClearMarkerCommand';
 
 import { HighlightCommand } from './commands/HighlightCommand';
 import { BoldCommand } from './commands/BoldCommand';
