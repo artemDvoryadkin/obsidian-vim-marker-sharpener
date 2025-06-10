@@ -1,8 +1,8 @@
 import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
-import { text } from 'stream/consumers';
-import { __DEV__ } from 'src/Commons/global';
+declare const __DEV__ = true;
+
 
 export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close' | 'comment_open' | 'comment_close';
 export type MarkerAction = 'bold' | 'italic' | 'highlight' | 'strikethrough' | 'code' | 'comment'

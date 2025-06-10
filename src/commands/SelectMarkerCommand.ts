@@ -2,7 +2,7 @@ import { Command, App } from 'obsidian';
 import { EditorHelper } from 'src/Helpers/EditorHelper';
 import { FormaterCommanger } from 'src/Helpers/FormaterHelper';
 import { MarkerCommandBase } from './MarkerCommandBase';
-import { __DEV__ } from 'src/Commons/global';
+declare const __DEV__ = true;
 
 
 export class SelectMarkerCommand extends MarkerCommandBase {

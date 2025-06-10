@@ -1,4 +1,5 @@
 import { ParserMarkdown } from '../ParserMarkdown'; // Импортируем функцию, которую будем тестировать
+declare const __DEV__ = true;
 
 describe('parseMarkdown', () => {
 	it('рабочий пример', () => {

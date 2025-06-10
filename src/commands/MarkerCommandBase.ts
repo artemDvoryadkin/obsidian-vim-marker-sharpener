@@ -2,7 +2,10 @@ import { Command, App, EditorPosition } from 'obsidian';
 import { SharpenerCommand } from 'src/Commons/SharpenerCommand';
 import { MarkerAction, FormaterCommanger } from 'src/Helpers/FormaterHelper';
 import { EditorHelper } from '../Helpers/EditorHelper';
-import { __DEV__ } from 'src/Commons/global';
+declare const __DEV__ = true;
+
+
+
 
 export abstract class MarkerCommandBase extends SharpenerCommand {
 	command: Command;
