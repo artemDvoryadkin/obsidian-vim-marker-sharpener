@@ -2,6 +2,7 @@ import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
 import { text } from 'stream/consumers';
+import { __DEV__ } from 'src/Commons/global';
 
 export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close' | 'comment_open' | 'comment_close';
 export type MarkerAction = 'bold' | 'italic' | 'highlight' | 'strikethrough' | 'code' | 'comment'
@@ -130,14 +131,14 @@ export class FormaterCommanger {
 		if (from.line > to.line || (from.line === to.line && from.ch > to.ch)) {
 			[from, to] = [to, from]
 		}
-		console.log("selection", selection)
+		__DEV__ && console.log("selection", selection)
 
 		lines.forEach((textLine, i) => {
-			console.log("textLine", textLine)
+			__DEV__ && console.log("textLine", textLine)
 			const fromCharPosition = (i === 0) ? from.ch : 0; // Определение fromCharPosition
 			const toCharPosition = (i === lines.length - 1) ? to.ch : textLine.length - 1; // Определение toCharPosition
 
-			console.log("char s", fromCharPosition, toCharPosition)
+			__DEV__ && console.log("char s", fromCharPosition, toCharPosition)
 
 			// проблема п=ного выделения строки позхиция head идет на следующую строку и ch:-1, делаеем затыску , да при ээтом подает markerAction
 			if (fromCharPosition === 0 && toCharPosition === -1) {
@@ -177,15 +178,15 @@ export class FormaterCommanger {
 		const firstDot = this.findDotPosition(textLine)
 		const colonos = textLine.indexOf(":")
 		const textLineLength = textLine.length
-		console.log("getMarkerPosition", firstFindChar)
+		__DEV__ && console.log("getMarkerPosition", firstFindChar)
 		// tckb
 		if (firstFindChar == 0) {
 
-			console.log("firsFindDot", { firstDot, colonos, cursorPosition })
+			__DEV__ && console.log("firsFindDot", { firstDot, colonos, cursorPosition })
 			if (
 				firstDot == -1 && colonos > -1 && cursorPosition <= colonos
 				|| firstDot > -1 && colonos < firstDot && cursorPosition <= colonos) {
-				console.log("test")
+				__DEV__ && console.log("test")
 				return { from: firstSpace + 1, to: colonos - 1 }
 			}
 			else if (firstDot === -1 || colonos === -1) {
@@ -450,7 +451,7 @@ export class FormaterCommanger {
 			if (fromCharPosition !== undefined && toCharPosition !== undefined) {
 
 				const toChainPosition = parser.getTextChain(chainsText, toCharPosition)
-				console.log("dde", toChainPosition, chainsText, toCharPosition)
+				__DEV__ && console.log("dde", toChainPosition, chainsText, toCharPosition)
 				if (toChainPosition === undefined) throw new Error("ddeieie")
 
 				const isFlagFrom = this.getIsFlagByMarkerAction(markerAction, fromChainPosition);
