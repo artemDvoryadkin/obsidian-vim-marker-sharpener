@@ -1,7 +1,7 @@
 import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
-declare const __DEV__ = true;
+const __DEV__ = true;
 
 
 export type MarkerType = 'bold_open' | 'bold_close' | 'italic_open' | 'italic_close' | 'highlight_open' | 'highlight_close' | 'text' | 'strikethrough_open' | 'strikethrough_close' | 'code_open' | 'code_close' | 'comment_open' | 'comment_close';

@@ -1,7 +1,7 @@
 import { FormaterCommanger, } from '../FormaterHelper';
 import { ParserMarkdown } from '../ParserMarkdown';
 import { expect } from '@jest/globals';
-declare const __DEV__ = true;
+const __DEV__ = true;
 
 describe('smart selector', () => {
 	let formaterCommanger: FormaterCommanger;
