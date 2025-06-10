@@ -1,3 +1,4 @@
+import '../Commons/dev-global';
 import { DefaultDeserializer } from 'v8';
 import { ParserMarkdown } from './ParserMarkdown';
 import { EditorSelection } from 'obsidian';
@@ -65,11 +66,11 @@ export class TextChain {
 		return this.type == 'bold_close' || this.type == 'italic_close' || this.type == 'highlight_close' || this.type == 'strikethrough_close' || this.type == 'code_close' || this.type == 'comment_close'
 
 	}
+	from: number;
+
 	isTextMarker(): boolean {
 		return (this.isItalic || this.isHighlight || this.isStrikethrough || this.isCode || this.isComment || this.isBold) && this.type == 'text'
 	}
-
-	from: number
 	to: number
 	type: MarkerType
 	content: string
@@ -213,7 +214,7 @@ export class FormaterCommanger {
 		const formaterCommanger = new FormaterCommanger()
 		const fromChain = formaterCommanger.getChainByPosition(chainsText, cursorPosition)
 
-		if (fromChain?.type == 'text') {
+		if (fromChain?.type == 'text' && !fromChain.isTextMarker()) {
 			// умное выделение
 			// если это елемент списка начало 1. что-то :
 

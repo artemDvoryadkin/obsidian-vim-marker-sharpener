@@ -3,7 +3,7 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class ItalicCommand extends MarkerCommandBase {
 	id = 'toggle-italic';
-	name = 'Toggle Italic';
+	name = 'Toggle italic';
 	prefix = '';
 	command: Command;
 

@@ -3,7 +3,7 @@ import { MarkerCommandBase } from './MarkerCommandBase';
 
 export class CommentCommand extends MarkerCommandBase {
 	id = 'toggle-comment';
-	name = 'Toggle Commant';
+	name = 'Toggle comment';
 	prefix = '';
 	command: Command;
 

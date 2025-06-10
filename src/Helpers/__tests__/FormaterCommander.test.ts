@@ -79,10 +79,12 @@ describe('Разное селкт маркер', () => {
 		{ input: "test4 **dddd** www", position: 7, result: { from: 8, to: 11 }, description: "" },
 		{ input: "test4 **dddd** www", position: 12, result: { from: 8, to: 11 }, description: "" },
 		{ input: "test4 dddd www  17", position: 5, result: { from: 5, to: 5 }, description: "" },
+		{ input: "- `Cmd+Shift+P` → `Введи Shell Command: Install 'cursor'` command in PATH", position: 3, result: { from: 3, to: 13 }, description: "" },
 
 
 	])(`->$input позиция $position =>> $result :: $description`, ({ input, position, result, description }) => {
 		const resultCall = formaterCommanger.getMarkerPosition(input, position)
+		__DEV__ && console.log("resultCall", resultCall)
 		expect(resultCall.from).toEqual(result.from);
 		expect(resultCall.to).toEqual(result.to);
 	})

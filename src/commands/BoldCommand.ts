@@ -4,7 +4,7 @@ import { ParserMarkdown } from 'src/Helpers/ParserMarkdown';
 
 export class BoldCommand extends MarkerCommandBase {
 	id = 'toggle-bold';
-	name = 'Toggle Bold';
+	name = 'Toggle bold';
 	prefix = '';
 	command: Command;
 

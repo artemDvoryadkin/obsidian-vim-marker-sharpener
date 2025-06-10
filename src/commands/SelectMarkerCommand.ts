@@ -7,7 +7,7 @@ declare const __DEV__ = true;
 
 export class SelectMarkerCommand extends MarkerCommandBase {
 	id = 'select-marker';
-	name = 'Select Marker';
+	name = 'Select marker';
 	prefix = '';
 	command: Command;
 
@@ -18,13 +18,17 @@ export class SelectMarkerCommand extends MarkerCommandBase {
 
 		const formaterCommanger = new FormaterCommanger();
 		const resultCall = formaterCommanger.getMarkerPosition(lineText, cursor.ch);
+		__DEV__ && console.log("resultCall", resultCall);
+		const anchor = { line: cursor.line, ch: resultCall.from }
 		__DEV__ && console.log("resultCall", resultCall)
 		const anchor = { line: cursor.line, ch: resultCall.from }
 
 		const head = { line: cursor.line, ch: resultCall.to }
+		const head = { line: cursor.line, ch: resultCall.to }
 
 		if (lineText.length > head.ch) head.ch += 1
 
+		__DEV__ && console.log("resultCall", { anchor, head });
 		__DEV__ && console.log("resultCall", { anchor, head })
 		editorHelper.editor!.setSelection(anchor, head);
 	}
